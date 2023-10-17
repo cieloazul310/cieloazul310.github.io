@@ -1,0 +1,382 @@
+---
+title: "react-swipeable-views から Swiper への移行"
+date: 2022-11-22T22:30:00+09:00
+lastmod: 2022-11-22T22:30:00+09:00
+draft: false
+keywords: []
+description: ""
+tags: ["React", "MUI", "Swiper"]
+categories: ["JavaScript"]
+author: cieloazul310
+---
+
+{/* Lead Paragraph */}
+
+[React] でスワイプによるスライドの操作を実装するライブラリ [react-swipeable-views] が非推奨になりました。この記事では、[MUI] (旧 Material-UI) のドキュメントに掲載されている [react-swipeable-views を使ったコード](https://mui.com/material-ui/react-tabs/#full-width)を代替するライブラリ [Swiper] に置き換えていきます。
+
+## 先行記事
+
+【React】Swiper + MUI Tab を利用してスワイプでタブ切り替えを行う  
+[https://ramble.impl.co.jp/1959/](https://ramble.impl.co.jp/1959/)
+
+本記事では以上の記事を大いに参考にしていますが、以下の2点で異なります。
+
+1. TypeScript で記述
+2. react-swipeable-views からの移行を念頭に置いて、その差分を記述
+
+## react-swipeable-views
+
+[react-swipeable-views] は React でスワイプ動作を実装するライブラリです。
+
+[MUI] (Material-UI) の [Tabs のデモ](https://mui.com/material-ui/react-tabs/#full-width)で紹介されているように React でスワイプを実装するメジャーなライブラリですが、[新たなメンテナーが見つからず](https://github.com/oliviertassinari/react-swipeable-views/issues/558)、2022年10月に非推奨であることが開発者によって明言されました。
+
+Deprecate package, do not use #676  
+[https://github.com/oliviertassinari/react-swipeable-views/issues/676](https://github.com/oliviertassinari/react-swipeable-views/issues/676)
+
+## Swiper
+
+[Swiper] は元々ピュア JavaScript でスワイプ動作を実装するライブラリでしたが、2020年7月にリリースされた v6 から [React に対応](https://swiperjs.com/react)し、その後のリリースで [Vue](https://swiperjs.com/vue) や [Angular](https://swiperjs.com/angular) にも対応しています。また [TypeScript] 製なので型定義ファイルが含まれています。
+
+### Swiper React の基本的な使い方
+
+```sh
+yarn add swiper
+```
+
+```tsx
+import * as React from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+
+function Page() {
+  return (
+    <Swiper>
+      <SwiperSlide>
+        <p>Slide One</p>
+      </SwiperSlide>
+      <SwiperSlide>
+        <p>Slide Two</p>
+      </SwiperSlide>
+      <SwiperSlide>
+        <p>Slide Three</p>
+      </SwiperSlide>
+    </Swiper>
+  );
+}
+```
+
+`<Swiper>` と `<SwiperSlide>` の2種類のコンポーネントと `swiper/css` をインポートすることで Swiper を React で使用することができます。
+
+`<Swiper>` コンポーネントが **Swiper のインスタンス**(以降 `SwiperCore` と表記)を生成し、コンポーネント内部でステートを保持する仕組みになっています。
+
+Swiper React Components  
+[https://swiperjs.com/react](https://swiperjs.com/react)
+
+<Ad variant="in-article" />
+
+## Swiper への移行
+
+ここからは react-swipeable-views が使われている [MUI] の `<Tabs>` コンポーネントの Full Width の例を Swiper で置き換えていきます。  
+[https://mui.com/material-ui/react-tabs/#full-width](https://mui.com/material-ui/react-tabs/#full-width)
+
+この例では Swiper 単体で完結するコードとは違って、以下の2点を実装する必要があります。
+
+1. `<Tabs>` でスライドを制御できるようにする
+2. 同様に、スワイプで操作したスライドと `<Tabs>` の表示を連動させる
+
+### コード例
+
+```tsx
+import * as React from "react";
+import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
+import AppBar from "@mui/material/AppBar";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
+import type { Swiper as SwiperCore } from "swiper";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+
+type TabPanelProps = React.PropsWithChildren<{
+  index: number;
+  value: number;
+}>;
+
+function TabPanel({ children, value, index }: TabPanelProps) {
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`full-width-tabpanel-${index}`}
+      aria-labelledby={`full-width-tab-${index}`}
+    >
+      {value === index && (
+        <Box sx={{ p: 3 }}>
+          <Typography>{children}</Typography>
+        </Box>
+      )}
+    </div>
+  );
+}
+
+function a11yProps(index: number) {
+  return {
+    id: `full-width-tab-${index}`,
+    "aria-controls": `full-width-tabpanel-${index}`,
+  };
+}
+
+function FullWidthTabs() {
+  const [swiper, setSwiper] = React.useState<SwiperCore | null>(null);
+  const [value, setValue] = React.useState(0);
+
+  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    setValue(newValue);
+    swiper?.slideTo(newValue);
+  };
+  const onSwiper = (currentSwiper: SwiperCore) => {
+    const swiperInstance = currentSwiper;
+    setSwiper(swiperInstance);
+  };
+  const onSlideChange = (currentSwiper: SwiperCore) => {
+    setValue(currentSwiper.activeIndex);
+  };
+
+  return (
+    <Box sx={{ bgcolor: "background.paper", width: 1 }}>
+      <AppBar position="static">
+        <Tabs
+          value={value}
+          onChange={handleChange}
+          indicatorColor="secondary"
+          textColor="inherit"
+          variant="fullWidth"
+          aria-label="full width tabs example"
+        >
+          <Tab label="Item One" {...a11yProps(0)} />
+          <Tab label="Item Two" {...a11yProps(1)} />
+          <Tab label="Item Three" {...a11yProps(2)} />
+        </Tabs>
+      </AppBar>
+      <Swiper
+        simulateTouch={false}
+        onSwiper={onSwiper}
+        onSlideChange={onSlideChange}
+      >
+        <SwiperSlide>
+          <TabPanel value={value} index={0}>
+            Item One
+          </TabPanel>
+        </SwiperSlide>
+        <SwiperSlide>
+          <TabPanel value={value} index={1}>
+            Item Two
+          </TabPanel>
+        </SwiperSlide>
+        <SwiperSlide>
+          <TabPanel value={value} index={2}>
+            Item Three
+          </TabPanel>
+        </SwiperSlide>
+      </Swiper>
+    </Box>
+  );
+}
+```
+
+デモ (Storybook)  
+[https://cieloazul310.github.io/mui-swiper/?path=/story/swiper--basic](https://cieloazul310.github.io/mui-swiper/?path=/story/swiper--basic)
+
+### 解説
+
+react-swipeable-views では、`<SwipeableViews>` コンポーネントに **props を介してステート `value` を直接反映できます**。したがって、スライドと `<Tabs>` の表示はどちらも一つのステート `value` のみで制御することができました。
+
+一方 `<Swiper>` コンポーネントでは **props 経由で表示スライドを制御することができません**。  
+Swiperでは **`<Swiper>` コンポーネント内に存在する `SwiperCore` インスタンスを使って制御する**必要があります。ということは、`<Tabs>` の表示と Swiper の挙動を関連づけるには、`SwiperCore` インスタンスを `<Swiper>` コンポーネントより上の階層で利用できるようにしなければなりません。
+
+#### 確認: MUI `<Tabs>` の基本的な構造
+
+```tsx
+function Page() {
+  // Tabs のステートフック
+  const [value, setValue] = React.useState(0);
+
+  // Tabs のイベントハンドラ
+  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    setValue(newValue);
+  };
+
+  // MUI Tabs のコンポーネント (a11yProps は省略)
+  return (
+    <Tabs value={value} onChange={handleChange}>
+      <Tab label="Item One" />
+      <Tab label="Item Two" />
+      <Tab label="Item Three" />
+    </Tabs>
+  );
+}
+```
+
+#### 準備: Swiper のインスタンス `SwiperCore` をコンポーネントより上の階層で扱う
+
+`<Swiper>` コンポーネントには `SwiperCore` インスタンスを受け取る際に発火する `onSwiper` というイベントハンドラが用意されています。このイベントハンドラを使って `SwiperCore` インスタンスを `<Swiper>` コンポーネントより上の階層で利用できるように設定します。
+
+##### `SwiperCore` インスタンスを扱うステートフックを作成
+
+```tsx
+import type { Swiper as SwiperCore } from "swiper";
+
+const [swiper, setSwiper] = React.useState<SwiperCore | null>(null);
+```
+
+ステートフックを作成します。型は `SwiperCore | null` 、初期値は `null` とします。
+
+##### `<Swiper>` コンポーネントで生成されたインスタンスを定数 `swiper` にセットする関数
+
+```tsx
+const onSwiper = (currentSwiper: SwiperCore) => {
+  const swiperInstance = currentSwiper;
+  setSwiper(swiperInstance);
+};
+
+return (
+  <Swiper onSwiper={onSwiper}>
+    <SwiperSlide />
+    <SwiperSlide />
+    <SwiperSlide />
+  </Swiper>
+);
+```
+
+`<Swiper>` コンポーネントの `onSwiper` イベントハンドラに設定する関数を以上のように定義します。`setSwiper` に `<Swiper>` コンポーネント内で生成した `SwiperCore` インスタンスを通すことで、定数 `swiper` が初期値の `null` から `SwiperCore` インスタンスに更新されます。
+
+定義した `onSwiper` をイベントハンドラに設定することで、`<Swiper>` コンポーネント内部の `SwiperCore` インスタンスを `swiper` という定数で `<Swiper>` コンポーネントの上の階層で利用できるようになりました。
+
+次に、これを基にして以下の2点を実装していきます。
+
+1. `<Tabs>` でスライドを制御できるようにする
+2. 同様に、スワイプで操作したスライドと `<Tabs>` の表示を連動させる
+
+#### 1. `<Tabs>` でスライドを制御できるようにする
+
+```tsx
+const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+  setValue(newValue);
+  // Swiper を動かす
+  swiper?.slideTo(newValue);
+};
+```
+
+前述の通り、`<Swiper>` コンポーネントの外からスライドを動かすには `SwiperCore` インスタンスを使って制御する必要があります。`<Tabs>` のイベントハンドラ `onChange` 内に `onSwiper` で更新されたステート `swiper` を使ったコードを加えることで、`<Tabs>` でスライドを制御できるようになります。
+
+```tsx
+// 型が SwiperCore | null なのでオプショナルチェーン演算子を付加
+swiper?.slideTo(newValue);
+```
+
+`SwiperCore` のメソッドは以下の API リファレンスで確認できます。
+
+Methods & Properties  
+[https://swiperjs.com/swiper-api#methods-and-properties](https://swiperjs.com/swiper-api#methods-and-properties)
+
+#### 2. スワイプで操作したスライドと `<Tabs>` の表示を連動させる
+
+```tsx
+const onSlideChange = (currentSwiper: SwiperCore) => {
+  setValue(currentSwiper.activeIndex);
+};
+```
+
+Swiper は Swiper 内部のステートの中で完結する仕様なので、スワイプ操作を行なっても `<Tabs>` のステート `value` は更新されません。Swiper と `<Tabs>` の表示を連動させるには、`<Swiper>` コンポーネントのイベントハンドラ `onSlideChange` 内でステート `value` の値を更新するコードを記述する必要があります。
+
+```tsx
+return (
+  <Swiper onSwiper={onSwiper} onSlideChange={onSlideChange}>
+    <SwiperSlide />
+    <SwiperSlide />
+    <SwiperSlide />
+  </Swiper>
+);
+```
+
+これで react-swipeable-views を使った MUI Tabs のコードを Swiper に置き換えることができました。
+
+### その他
+
+#### react-swipeable-views と Swiper のデフォルト値
+
+```tsx
+<Swiper simulateTouch={false}>
+  <SwiperSlide />
+  <SwiperSlide />
+</Swiper>
+```
+
+Swiper ではマウスによるスライド操作がデフォルトで有効になっています。react-swipeable-views ではデフォルトで無効になっているため、動作を合わせるには `<Swiper>` コンポーネントの `simulateTouch` props を `false` に設定します。逆に react-swipeable-views でマウスによるスライド操作を有効にするには `<SwipeableViews>` コンポーネントに `enableMouseEvents` props を渡します。
+
+#### Swiper のモジュール
+
+Swiper では Navigation や Pagination など様々なモジュールが用意されています。React で利用するには `<Swiper>` コンポーネントの `modules` props にインポートしたモジュールを配列として指定することで実装できます。
+
+Demos  
+[https://swiperjs.com/demos](https://swiperjs.com/demos)
+
+以下のコードはキーボードによるスライド操作を実装する `Keyboard` モジュールを実装する例です。
+
+```tsx
+import * as React from "react";
+import { type Swiper as SwiperCore, Keyboard } from "swiper";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+
+function Page() {
+  return (
+    <Swiper
+      modules={[Keyboard]}
+      keyboard={{
+        enabled: true,
+      }}
+    >
+      <SwiperSlide />
+      <SwiperSlide />
+      <SwiperSlide />
+    </Swiper>
+  );
+}
+```
+
+Using JS Modules  
+[https://swiperjs.com/swiper-api#using-js-modules](https://swiperjs.com/swiper-api#using-js-modules)
+
+## Storybook による動作デモ
+
+[Storybook](https://storybook.js.org/) で作成したデモページとリポジトリです
+
+動作デモ  
+[https://cieloazul310.github.io/mui-swiper/](https://cieloazul310.github.io/mui-swiper/)
+
+リポジトリ  
+[https://github.com/cieloazul310/mui-swiper](https://github.com/cieloazul310/mui-swiper)
+
+## リンク
+
+- [MUI]
+- [Swiper]
+- [react-swipeable-views]
+- [【React】Swiper + MUI Tab を利用してスワイプでタブ切り替えを行う](https://ramble.impl.co.jp/1959/)
+
+{/* Music */}
+
+<YouTube src="zUQiUFZ5RDw" />
+
+Bad Moon Rising / Creedence Clearwater Revival (1969)
+
+<Ad variant="display" />
+
+{/* References */}
+
+[react-swipeable-views]: https://react-swipeable-views.com/ "react-swipeable-views"
+[Swiper]: https://swiperjs.com/ "Swiper"
+[React]: https://reactjs.org/ "React"
+[TypeScript]: https://www.typescriptlang.org "TypeScript"
+[MUI]: https://mui.com "MUI"

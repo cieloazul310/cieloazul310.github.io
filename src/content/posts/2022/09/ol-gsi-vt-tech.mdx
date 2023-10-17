@@ -1,0 +1,153 @@
+---
+title: "ol-gsi-vt 技術面のメモ"
+date: 2022-09-30T21:10:00+09:00
+lastmod: 2022-09-30T21:10:00+09:00
+draft: false
+tags: []
+categories: ["JavaScript"]
+author: cieloazul310
+---
+
+{/* Lead Paragraph */}
+
+[OpenLayers] で国土地理院のベクトルタイルを簡単に表示するパッケージ `@cieloazul310/ol-gsi-vt` の作成に関する技術面のメモです。
+
+ol-gsi-vt がどんなパッケージか知りたい方は、以下の実例集のページをご覧ください。  
+実例集  
+[https://cieloazul310.github.io/ol-gsi-vt/](https://cieloazul310.github.io/ol-gsi-vt/)
+
+関連記事:  
+[国土地理院のベクトルタイルを手軽にOpenLayersで表示するパッケージを作成しました](/2022/09/ol-gsi-vt/index.md)
+
+<Ad variant="in-article" />
+
+## 作成したもの
+
+- パッケージ ([Lerna])
+- 実例集 ([Next.js] + [MDX] (v1) + [Chakra UI])
+- デフォルトテンプレート ([Vite])
+
+### パッケージ (Lerna)
+
+パッケージは [Lerna] を使った Monorepo で作成しました。
+
+Lerna は[2021年2月にv4.0.0](https://github.com/lerna/lerna/releases/tag/v4.0.0)が出てから一年以上メンテナンスがされていない状態であったため、脱 Lerna の風潮がありましたが、[2022年5月にv5.0.0](https://github.com/lerna/lerna/releases/tag/v5.0.0)がリリースされました。さらに v5.1.0からは [Nx](https://nx.dev/) を開発する [Nrwl がメンテナンスを引き受けることが発表され](https://blog.nrwl.io/lerna-5-1-new-website-new-guides-new-lerna-example-repo-distributed-caching-support-and-speed-64d66410bec7)、その後も継続的にリリースがされています。(2022年9月30日現在の最新版は v5.6.0)
+
+Monorepo の構成は以下のようになっています。`/app/gallery` では後述する実例集のサイトを構成しています。
+
+```txt
+.
+├── app
+│   └── gallery
+└── packages
+    ├── ol-gsi-vt
+    ├── ol-gsi-vt-style
+    └── ol-gsi-vt-style-utils
+```
+
+#### 各パッケージ
+
+- [@cieloazul310/ol-gsi-vt] : 中心となるパッケージ
+- [@cieloazul310/ol-gsi-vt-style] : スタイルに特化したパッケージ
+- [@cieloazul310/ol-gsi-vt-style-utils] : 補助的パッケージ
+
+コンパイルは [TypeScript] でおこなっています。
+
+`@cieloazul310/ol-gsi-vt` をインストールすると他の全てのパッケージの機能を使うことができます。
+
+`@cieloazul310/ol-gsi-vt-style` では [Font Awesome] の SVG パッケージである [@fortawesome/free-solid-svg-icons](https://www.npmjs.com/package/@fortawesome/free-solid-svg-icons) を使用しています。これが唯一の依存パッケージです。
+
+OpenLayers で Font Awesome のアイコンを利用するのに四苦八苦したので、また別途記事にしたいです。
+
+### 実例集 (Next.js + MDX (v1) + Chakra-UI)
+
+地図とサンプルコードを掲載した実例集のサイトを作成しました。  
+[https://cieloazul310.github.io/ol-gsi-vt/](https://cieloazul310.github.io/ol-gsi-vt/)
+
+#### Next.js
+
+[Next.js] でのサイト構築は初めてでしたが、機能を限っていることもあり、比較的短い時間で作成することができました。
+
+引っかかった部分は、Next.js v12 から標準になったコンパイラ [SWC] 関連で発生したバグくらいでした。この件については後述しますが、逆に SWC の存在を知るきっかけになって良かったと思っています。
+
+#### MDX (v1)
+
+Next.js のページには [MDX] で構成しました。こちらも Next.js の公式ガイドに則って難なく導入できました。
+
+[https://nextjs.org/docs/advanced-features/using-mdx](https://nextjs.org/docs/advanced-features/using-mdx)
+
+#### Chakra UI
+
+React のコンポーネントライブラリでは [MUI (Material-UI)][MUI] を使うことが多かったのですが、他のライブラリも試してみたいと思ったため今回は [Chakra UI] を使ってみました。
+
+MUI と共通する要素も多いため、こちらも難なく導入できました。痒い所に手が届くようなフックがあらかじめ用意されている点が MUI に比べて優れている点だと感じました。
+
+### テンプレート
+
+以前、[OpenLayers でベクトルタイルを表示するための基本的なテンプレート](https://github.com/cieloazul310/ol-vectortile) を作成しましたが、今回は、ol-gsi-vt パッケージを使用した OpenLayers プロジェクトのテンプレートを新たに作成しました。
+
+ol-gsi-vt-template  
+[https://github.com/cieloazul310/ol-gsi-vt-template](https://github.com/cieloazul310/ol-gsi-vt-template)
+
+#### Vite
+
+当初は以前作成したテンプレートと同様に [webpack] をビルドツールとしていましたが、今回作成したテンプレートでは [Vite] に移行しました。これは OpenLayers が用意する [create-ol-app](https://github.com/openlayers/create-ol-app) のデフォルトのテンプレートで Vite が使われていたことが理由です。
+同時に、以前作成した OpenLayers でベクトルタイルを表示するための基本的なテンプレートの方も Vite に移行しています。
+
+Vite は設定が最小限で済む上にビルドも早く、webpack の面倒くさい部分が軽減された優れたフロントエンドツールだと思いました。React も簡単に使えるため、[create-react-app](https://github.com/facebook/create-react-app) の代替にもなり得ます。
+
+## 新たに知ったツールなど
+
+- [SWC]: Next.js で使われている Rust で書かれたトランスパイラ
+- [Vite]: create-ol-app のデフォルトテンプレートで使われている
+- [esbuild]: Vite に組み込まれている Go 言語で書かれたバンドラー
+
+次から次へと新しいツールが出てきて、2,3年前とは勢力図がガラッと変わっていることに驚きます。
+
+## 引っかかったポイント
+
+### Next.js と CSS
+
+当初、ol-gsi-vt では [Font Awesome] のアイコンを CSS 経由 ([@fortawesome/fontawesome-free](https://github.com/FortAwesome/Font-Awesome/tree/6.x/js-packages/%40fortawesome/fontawesome-free)) でフォントとして読み込み、表示する仕様でした。しかしながら、Next.js ではページ以外から CSS を読み込むことが禁止されているので、パッケージ内の CSS 経由で [Font Awesome] を利用しようとすると、Next.js 上で表示することができません。
+
+SVG で読み込む方法よりもフォントとして読み込む方が動作が好みだったため、どうにかフォントデータとして読み込む努力をしましたが、とりあえずは SVG のパッケージである [@fortawesome/free-solid-svg-icons](https://www.npmjs.com/package/@fortawesome/free-solid-svg-icons) からアイコンを読み込むことで妥協しています。
+
+### Next.js と SWC 関連
+
+Next.js で OpenLayers のベクターレイヤー (VectorLayer, VectorTileLayer) を扱うとビルドが上手くいきません。ビルド自体はできるのですが、`next start` で動作確認をすると、ベクターレイヤーを使ったページのみで `Application error: a client-side exception has occurred` と表示されます。
+
+コンソールを確認したところ、SWC の minify に関連するバグとわかったので、`next.config.js` にデフォルトで設定されている `swcMinify: true` を削ることで解決しました。
+
+## 今後
+
+CI/CD の概念や、[GitHub Actions](https://docs.github.com/ja/actions) を使ったリリースまでのワークフロー自動化についてまだ詳しくない、というかようやくその意義について理解してきたので、習得していきたいです。
+
+{/* Music */}
+
+<YouTube src="4B214L6YxmA" />
+
+スローバラード / T字路s (FUJI ROCK 22)
+
+<Ad variant="display" />
+
+{/* References */}
+
+[OpenLayers]: http://openlayers.org/ "OpenLayers"
+[Next.js]: https://nextjs.org/ "Next.js"
+[React]: https://reactjs.org/ "React"
+[Chakra UI]: https://chakra-ui.com/ "Chakra UI"
+[SWC]: https://swc.rs/ "SWC"
+[Vite]: https://ja.vitejs.dev/ "Vite"
+[esbuild]: https://esbuild.github.io/ "esbuild"
+[webpack]: https://webpack.js.org/ "webpack"
+[MDX]: https://mdxjs.com/ "MDX"
+[Lerna]: https://lerna.js.org/ "Lerna"
+[Font Awesome]: https://fontawesome.com/ "Font Awesome"
+[GitHub Actions]: https://docs.github.com/ja/actions "GitHub Actions"
+[MUI]: https://mui.com/ "MUI"
+[@cieloazul310/ol-gsi-vt]: https://www.npmjs.com/package/@cieloazul310/ol-gsi-vt
+[@cieloazul310/ol-gsi-vt-style]: https://www.npmjs.com/package/@cieloazul310/ol-gsi-vt-style
+[@cieloazul310/ol-gsi-vt-style-utils]: https://www.npmjs.com/package/@cieloazul310/ol-gsi-vt-style-utils
+[TypeScript]: https://www.typescriptlang.org "TypeScript"
+[Gatsby]: https://www.gatsbyjs.org "Gatsby"
+[地理院地図]: https://maps.gsi.go.jp/ "地理院地図"

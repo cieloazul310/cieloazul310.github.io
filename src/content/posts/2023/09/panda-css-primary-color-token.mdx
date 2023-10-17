@@ -1,0 +1,256 @@
+---
+title: Panda CSSでPrimaryカラーにデフォルトのパレットの色を設定する
+date: 2023-09-10T16:58:07+09:00
+lastmod: 2023-09-10T16:58:07+09:00
+draft: false
+tags: ["Panda CSS"]
+categories: ["memo"]
+author: cieloazul310
+---
+
+{/* Lead Paragraph */}
+
+Panda CSSでPrimaryカラーにデフォルトのパレットの色を設定するコードの作成例です。
+
+## 環境
+
+```yaml
+- @pandacss/dev: ^0.13.1
+```
+
+[Panda CSS - Build modern websites using build time and type-safe CSS-in-JS](https://panda-css.com/)
+
+## 目標
+
+PandaCSSデフォルトのテーマに組み込まれているColorsトークンの値をPrimaryカラーに設定し、`primary.${shade}`という色合い(`Shade`)を持つトークンとして利用できるようにすること。
+
+```tsx
+import { css } from "../styled-system/css";
+
+const style = css({ color: "primary.600" });
+```
+
+## 方法
+
+```tsx
+import type { PropertyTypes } from "../styled-system/types/prop-type";
+
+const shades = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950];
+
+function definePalette(props: Record<string, PropertyTypes["colorPalette"]>) {
+  return Object.entries(props).reduce<{
+    [key: string]: {
+      [key: string]: { value: string };
+    };
+  }>(
+    (accum, [key, color]) => ({
+      ...accum,
+      [key]: shades.reduce<{
+        [key: string]: { value: string };
+      }>(
+        (previousValue, curr) => ({
+          ...previousValue,
+          [curr]: { value: `{colors.${color}.${curr}}` },
+        }),
+        {},
+      ),
+    }),
+    {},
+  );
+}
+```
+
+```tsx
+export default defineConfig({
+  theme: {
+    extend: {
+      semanticTokens: {
+        colors: {
+          ...definePalette({ primary: "sky", secondary: "orange" }),
+        },
+      },
+    },
+  },
+});
+```
+
+### 留意点
+
+この方法では`panda.config`はデフォルトのテーマを拡張(extend)することを前提としています。
+
+<Ad variant="in-article" />
+
+## 解説
+
+1. `panda.config`に`semanticTokens`を設定する
+2. ヘルパーとなる`definePalette`関数を作成する
+
+### (補) デザイントークンとは
+
+デザイントークンはUIフレームワークで使用されている短縮記法です。デザイントークンを用いることで統一感のあるデザインが可能になります。Panda CSSのデフォルトのテーマにはColors, Spacing, Border Radiusなど豊富なトークンが組み込まれていています。
+
+[Tokens - Panda CSS](https://panda-css.com/docs/theming/tokens)
+
+以下の例では、`<p>`要素にPanda CSSの文字サイズ`md`、文字色`red.600`を設定するReactのコードです。
+
+```tsx
+import { css } from "../styled-system/css";
+
+const App = () => {
+  return <p className={css({ fontSize: "md", color: "red.600" })}>Hoge</p>;
+};
+```
+
+上記のコードは以下のDOMに変換されます。
+
+```html
+<p class="fs_md text_red\.600">hoge</p>
+```
+
+上記のDOMは以下のようなCSS変数とクラスの組み合わせによってスタイリングされます。
+
+```css
+:where(:root, :host) {
+  --font-sizes-md: 1rem;
+  --colors-red-600: #dc2626;
+}
+
+.fs_md {
+  font-size: var(--font-sizes-md);
+}
+
+.text_red\.600 {
+  color: var(--colors-red-600);
+}
+```
+
+Panda CSS Playground: [https://play.panda-css.com/94nv8kumTM](https://play.panda-css.com/94nv8kumTM)
+
+### 1. `panda.config`に`semanticTokens`を設定する
+
+`panda.config`で新たなトークンを設定する場合、値を直接指定する`tokens`と、**既存のトークンの値を使用して**新たなトークンを設定する`semanticTokens`の2種類があります。
+
+```tsx
+import { defineConfig } from "@pandacss/dev";
+
+export default defineConfig({
+  theme: {
+    extend: {
+      tokens: {
+        colors: {
+          success: { value: "#6f6" },
+        },
+      },
+      semanticTokens: {
+        colors: {
+          danger: { value: "{colors.red.700}" },
+        },
+      },
+    },
+  },
+});
+```
+
+上記の例では`tokens`でsuccessカラーを設定し、`semanticTokens`でdangerカラーを設定しています。`tokens`では色をカラーコードで指定したのに対して、`semanticTokens`ではデフォルトのテーマに組み込まれているトークンの値を選択することができます。
+
+ちなみにPanda CSSのデフォルトのパレットはTailwind CSSのパレットがベースになっているようです。Panda CSSと開発者が同じChakra UIのパレットとは同じトークン名であっても色が異なります。
+
+[Theme - Panda CSS](https://panda-css.com/docs/customization/theme#colors)
+
+[Customizing Colors - Tailwind CSS](https://tailwindcss.com/docs/customizing-colors)
+
+PrimaryカラーにデフォルトColorsのSkyを指定するには以下のように`semanticTokens`を設定することで実現可能です。
+
+```tsx
+export default defineConfig({
+  theme: {
+    extend: {
+      semanticTokens: {
+        colors: {
+          primary: {
+            50: { value: "{colors.sky.50}" },
+            100: { value: "{colors.sky.100}" },
+            200: { value: "{colors.sky.200}" },
+            /* 略 */
+            950: { value: "{colors.sky.950}" },
+          },
+        },
+      },
+    },
+  },
+});
+```
+
+しかし上記のように、デフォルトのColorsと同様50から950までの11種類の色合い(`Shade`)を一つ一つ手作業で設定するのは非常に面倒です。この例だとPrimaryカラーを変更するのも面倒です。さらにPrimaryカラーだけではなく、Secondaryカラーなど複数のパレットを設定する場合、コードは更に冗長になります。
+
+そこで`semanticTokens`にを出力する`definePalette`関数を作成します。
+
+### 2. `definePalette`関数を作成する
+
+```tsx
+import type { PropertyTypes } from "../styled-system/types/prop-type";
+
+const shades = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950];
+
+function definePalette(props: Record<string, PropertyTypes["colorPalette"]>) {
+  return Object.entries(props).reduce<{
+    [key: string]: {
+      [key: string]: { value: string };
+    };
+  }>(
+    (accum, [key, color]) => ({
+      ...accum,
+      [key]: shades.reduce<{
+        [key: string]: { value: string };
+      }>(
+        (previousValue, curr) => ({
+          ...previousValue,
+          [curr]: { value: `{colors.${color}.${curr}}` },
+        }),
+        {},
+      ),
+    }),
+    {},
+  );
+}
+```
+
+この関数の使い方は以下の通りです。`semanticTokens.colors`にスプレッド構文で`definePalette`を記述します。
+
+```tsx
+export default defineConfig({
+  theme: {
+    extend: {
+      semanticTokens: {
+        colors: {
+          ...definePalette({ primary: "sky", secondary: "orange" }),
+        },
+      },
+    },
+  },
+});
+```
+
+これで色合いを持つPrimaryカラー、Secondaryカラーを利用することができます。
+
+```tsx
+import { css } from "../styled-system/css";
+
+const style = css({
+  color: { base: "primary.700", _dark: "primary.100" },
+  bg: { base: "secondary.50", _dark: "secondary: 950" },
+});
+```
+
+## リンク
+
+[Panda CSS - Build modern websites using build time and type-safe CSS-in-JS](https://panda-css.com/)
+
+{/* Music */}
+
+<YouTube src="LhIKftW0XYQ" />
+Cumbia Algarrobera / Son Rompe Pera (2020)
+
+<Ad variant="display" />
+
+{/* References */}

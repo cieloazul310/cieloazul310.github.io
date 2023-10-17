@@ -7,7 +7,11 @@ const postsCollection = defineCollection({
     z.object({
       title: z.string(),
       date: z.date(),
+      lastmod: z.date().optional(),
       draft: z.boolean().optional(),
+      tags: z.array(z.string()),
+      categories: z.array(z.string()),
+      author: z.string(),
       featuredImg: image()
         .optional()
         .catch((ctx) => {

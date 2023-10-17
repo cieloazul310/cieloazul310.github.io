@@ -2,7 +2,8 @@ import { defineMenu } from "@cieloazul310/astro-sarkara";
 
 export const siteMetadata = {
 	title: "水戸地図(β)",
-	description: "水戸地図のAstroバージョン"
+	description: "水戸地図のAstroバージョン",
+  image: "./ogimage.png",
 };
 export const menu = defineMenu([
   { title: "Top", href: "/" },
