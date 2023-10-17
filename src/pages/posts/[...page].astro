@@ -7,6 +7,7 @@ import {
   ArticleList,
   Pagination,
 } from "@cieloazul310/astro-sarkara";
+import Analytics from "../../components/Analytics.astro";
 import PostListItem from "../../components/PostListItem.astro";
 import { pageSize, menu, siteMetadata } from "../../data";
 
@@ -26,6 +27,7 @@ const { page } = Astro.props;
 ---
 
 <SarkaraLayout title="Posts" siteMetadata={siteMetadata} menu={menu}>
+  <Analytics slot="top-of-head" />
   <Fragment slot="jumbotron-footer">
     {page.currentPage !== 1 && `(${page.currentPage}/${page.lastPage})`}
   </Fragment>
