@@ -1,0 +1,43 @@
+---
+import { cx, css } from "@cieloazul310/sarkara-css/css";
+
+interface Props {
+  variant?: "display" | "in-article";
+}
+const { variant = "display" } = Astro.props;
+const inArticleStyle = css({ my: 4 });
+---
+
+<div
+  class:list={[
+    css({ maxWidth: "100%", overflow: "hidden" }),
+    { [inArticleStyle]: variant === "in-article" },
+  ]}
+>
+  <span class={css({ display: "block", fontSize: "sm" })}>広告</span>
+  {
+    variant === "display" && (
+      <ins
+        class={cx("adsbygoogle", css({ display: "block" }))}
+        data-ad-client="ca-pub-7323207940463794"
+        data-ad-slot="5892967151"
+        data-ad-format="auto"
+        data-full-width-responsive="true"
+      />
+    )
+  }
+  {
+    variant === "in-article" && (
+      <ins
+        class={cx(
+          "adsbygoogle",
+          css({ display: "block", textAlign: "center" }),
+        )}
+        data-ad-layout="in-article"
+        data-ad-format="fluid"
+        data-ad-client="ca-pub-7323207940463794"
+        data-ad-slot="6120305662"
+      />
+    )
+  }
+</div>

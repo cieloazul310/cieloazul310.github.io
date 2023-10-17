@@ -13,6 +13,8 @@ import {
 } from "@cieloazul310/astro-sarkara";
 import { css } from "@cieloazul310/sarkara-css/css";
 import YouTube from "../../components/YouTube.astro";
+import Ad from "../../components/ads/Ad.astro";
+import AdScript from "../../components/ads/Script.astro";
 import { siteMetadata, menu } from "../../data";
 import { dateString } from "../../utils";
 
@@ -75,7 +77,7 @@ const { Content } = await entry.render();
         </Alert>
       )
     }
-    <Content components={{ YouTube, PanelLink, Alert }} />
+    <Content components={{ YouTube, PanelLink, Alert, Ad }} />
   </Paper>
   <Paper>
     <footer>
@@ -92,4 +94,5 @@ const { Content } = await entry.render();
   <Navigation {...navigation} />
   <PaperLink href="/posts">Posts Top</PaperLink>
   <Navigation {...navigation} direction="column" slot="sidebar-top" />
+  <AdScript slot="bottom-of-body" />
 </SarkaraLayout>

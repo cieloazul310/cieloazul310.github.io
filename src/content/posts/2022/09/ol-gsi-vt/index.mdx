@@ -1,0 +1,98 @@
+---
+title: "国土地理院のベクトルタイルを手軽にOpenLayersで表示するパッケージを作成しました"
+date: 2022-09-19T21:00:00+09:00
+lastmod: 2022-09-19T21:00:00+09:00
+draft: false
+tags: ["OpenLayers", "地図", "ベクトルタイル"]
+categories: ["Works"]
+author: cieloazul310
+---
+
+{/* Lead Paragraph */}
+
+国土地理院のベクトルタイルを地図ライブラリ [OpenLayers] で手軽に表示するパッケージ **@cieloazul310/ol-gsi-vt** をリリースしました。
+
+GitHub リポジトリ  
+[https://github.com/cieloazul310/ol-gsi-vt](https://github.com/cieloazul310/ol-gsi-vt)
+
+デモ  
+[https://cieloazul310.github.io/ol-gsi-vt](https://cieloazul310.github.io/ol-gsi-vt)
+
+npm  
+[https://www.npmjs.com/package/@cieloazul310/ol-gsi-vt](https://www.npmjs.com/package/@cieloazul310/ol-gsi-vt)
+
+## 機能
+
+- 2種類のベクトルタイルに対応
+  - [ベクトルタイル] (2019年7月29日関東の一部地域、2020年3月19日全国提供開始)
+  - [最適化ベクトルタイル] (2022年9月6日提供開始開始)
+- 設定不要で使用可能
+- テーマによる配色、タイポグラフィの編集
+- [TypeScript]による型安全性
+
+## 使い方
+
+```sh
+yarn add @cieloazul310/ol-gsi-vt
+```
+
+```ts
+import { gsiOptVtLayer } from "@cieloazul310/ol-gsi-vt";
+
+// VectorTileLayer として使うことができる
+const layer = gsiOptVtLayer();
+```
+
+詳しい使い方は GitHub リポジトリへ  
+[https://github.com/cieloazul310/ol-gsi-vt](https://github.com/cieloazul310/ol-gsi-vt)
+
+## 動機
+
+国土地理院がバイナリ形式の[ベクトルタイル]の提供実験を始めて3年が経ちました。バイナリ形式のベクトルタイルはそれ以前の [GeoJSON 形式のベクトルタイル](https://github.com/gsi-cyberjapan/vector-tile-experiment)と比べて非常に軽く、[OpenLayers] などの地図ライブラリでもサクサク動作します。
+
+とても素晴らしいベクトルタイルですが、ベースマップとして利用する場合はそのスタイルを一つ一つ設定する必要があり非常に面倒です。ベクトルタイルの仕様書を読み込まなければなりません。地物は小縮尺と大縮尺では同じプロパティでも異なる仕様になっている場合があり、縮尺に合わせてちまちまとスタイルを記述しなければなりません。ベクトルタイルの提供実験では [Mapbox GL JS] で表示するための `style.json` が用意されていますが、OpenLayers や Leaflet で大縮尺と小縮尺の両方の閲覧に耐えうるベクトルタイルのベースマップを作成するのは非常に面倒なのです。
+
+ベクトルタイルでベースマップを作る際に、いちいちスタイルを設定するのは非常に面倒なので、自分用のプリセットを作成してそれを繰り返し使えばいいと考えました。しかしそのプリセットを作ることさえ面倒だったので開発は一時中断しました。
+
+さて、2022年9月6日に[最適化ベクトルタイル]が公開されました。従来のベクトルタイルが数値情報や基盤地図情報などをソースとして、地理院地図のラスタタイルを再現する仕様だったのに対して、最適化ベクトルタイルは地物の整理がされており、スタイルの設定の煩雑さが軽減されました。また Web で閲覧するのにより適した仕様になっています。
+
+最適化ベクトルタイルを試してみるうちに、先述の OpenLayers 用のプリセット作成のことを思い出し、作業を進めていくうちに良い感じに仕上がっていったので、折角なので npm にパッケージとして公開してみました。
+
+<Ad variant="in-article" />
+
+## 動機その2
+
+Web で地図を表示するにはどうすればいいでしょうか。
+
+単に地図を表示したいのであれば Google マップを埋め込めば良いでしょう。地図で何かを表現したいとき、課金を厭わないのであれば、[Google Maps API] や [Mapbox GL JS] が選択肢になるでしょう。地図をフリーで自由に使いたいのであれば、[OpenLayers] や [Leaflet] などのオープンソースのライブラリがあります。
+
+OpenLayers や Leaflet といったオープンソースの地図ライブラリでは、フリーで使える綺麗な日本語のベースマップが不足していました。選択肢は国土地理院が提供する[地理院タイル](https://maps.gsi.go.jp/development/ichiran.html)か [OpenStreetMap](https://www.openstreetmap.org/) のラスタタイルくらいありません。地理院タイルは Goole マップに慣れた目からすると、特に大縮尺になると少々野暮ったさを感じてしまいます。
+
+ここでベクトルタイルです。ベクトルタイルの利点は地物を間引きや配色の調整を自在にできることです。地物を間引くことで、道路だけの地図、水域だけの地図、他のラスタタイル上に注記や境界線だけを描写するといった使い方ができます。配色を調整することで、特定の地物を強調した地図、地図上にデータを描写するための淡色の地図といった表現が可能になります。
+
+国土地理院がベクトルタイルの提供を始めたことは、日本語のベースマップ不足を解決し、Web 上の地図表現を前進させる契機になると思います。
+
+ベクトルタイル、もっと手軽に使えればいいよね、ということで、手軽に使ってみたい方は`@cieloazul310/ol-gsi-vt` パッケージを宜しくどうぞ。
+
+GitHub リポジトリ  
+[https://github.com/cieloazul310/ol-gsi-vt](https://github.com/cieloazul310/ol-gsi-vt)
+
+デモ  
+[https://cieloazul310.github.io/ol-gsi-vt](https://cieloazul310.github.io/ol-gsi-vt)
+
+{/* Music */}
+
+<YouTube src="uJH7Y_0kWeI" />
+ある日のこと / 坂本慎太郎 (2022)
+
+<Ad variant="display" />
+
+{/* References */}
+
+[OpenLayers]: http://openlayers.org/ "OpenLayers"
+[Leaflet]: https://leafletjs.com/ "Leaflet"
+[Mapbox GL JS]: https://docs.mapbox.com/jp/mapbox-gl-js/overview/ "Mapbox GL JS"
+[Google Maps API]: https://developers.google.com/maps?hl=ja "Google Maps API"
+[TypeScript]: https://www.typescriptlang.org "TypeScript"
+[ベクトルタイル]: https://github.com/gsi-cyberjapan/gsimaps-vector-experiment "地理院地図Vector（仮称）提供実験"
+[最適化ベクトルタイル]: https://github.com/gsi-cyberjapan/optimal_bvmap "最適化ベクトルタイル試験公開"
