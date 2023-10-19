@@ -17,6 +17,8 @@ import YouTube from "../components/YouTube.astro";
 import Analytics from "../components/Analytics.astro";
 import Ad from "../components/ads/Ad.astro";
 import AdScript from "../components/ads/Script.astro";
+import Twitter from "../components/twitter/Twitter.astro";
+import TwitterScript from "../components/twitter/Script.astro";
 import { siteMetadata, menu } from "../data";
 import { dateString } from "../utils";
 
@@ -80,7 +82,7 @@ const { Content } = await entry.render();
         </Alert>
       )
     }
-    <Content components={{ YouTube, PanelLink, Alert, Ad, a: Link }} />
+    <Content components={{ YouTube, PanelLink, Alert, Ad, Twitter, a: Link }} />
   </Paper>
   <Paper>
     <footer>
@@ -97,5 +99,8 @@ const { Content } = await entry.render();
   <Navigation {...navigation} />
   <PaperLink href="/posts">Posts Top</PaperLink>
   <Navigation {...navigation} direction="column" slot="sidebar-top" />
-  <AdScript slot="bottom-of-body" />
+  <Fragment slot="bottom-of-body">
+    <TwitterScript />
+    <AdScript />
+  </Fragment>
 </SarkaraLayout>

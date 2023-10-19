@@ -18,4 +18,4 @@ export const menu = defineMenu([
     ],
   },
 ]);
-export const pageSize = 1;
+export const pageSize = 25;
