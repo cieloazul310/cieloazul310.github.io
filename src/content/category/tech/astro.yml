@@ -1,3 +1,6 @@
 name: Astro
 type: tech
-description: 静的Webサイトを構築するフレームワーク
+index: 0
+description: |
+  Astroは静的Webサイトを構築するフレームワークです。クライアント側のJavaScriptを極力減らすことで高速なWebサイトを実現します。
+url: https://astro.build/

@@ -1,3 +1,5 @@
 name: Gatsby
 type: tech
-description: 
+index: 1
+description: GatsbyはWebサイトを構築するReactベースのフレームワークです。
+url: https://www.gatsbyjs.com/

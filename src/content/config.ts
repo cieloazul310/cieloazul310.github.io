@@ -29,14 +29,16 @@ const categoryCollection = defineCollection({
     name: z.string(),
     type: reference("categoryType"),
     description: z.string().optional().nullable(),
+    url: z.string().optional().nullable(),
+    index: z.number(),
   }),
 });
 
 const categoryTypeCollection = defineCollection({
   type: "data",
   schema: z.object({
-    title: z.string(),
-    description: z.string().optional(),
+    name: z.string(),
+    description: z.string().optional().nullable(),
     categories: z.array(reference("category")),
   }),
 })

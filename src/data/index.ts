@@ -8,14 +8,18 @@ export const siteMetadata = defineSiteMetadata({
 });
 export const menu = defineMenu([
   { title: "トップページ", href: "/" },
-  { title: "記事一覧", href: "/posts" },
+  // { title: "記事一覧", href: "/posts" },
   {
     title: "技術記事",
     items: [
-      { title: "技術記事", href: "/tech" },
-      { title: "Astro", href: "/tech/astro" },
-      { title: "Gatsby", href: "/tech/gatsby" },
+      { title: "技術記事", href: "/categories/tech" },
+      { title: "Astro", href: "/categories/tech/astro" },
+      { title: "Gatsby", href: "/categories/tech/gatsby" },
     ],
+  },
+  {
+    title: "作ったもの",
+    items: [{ title: "作ったもの", href: "/categories/works" }],
   },
 ]);
 export const pageSize = 25;
