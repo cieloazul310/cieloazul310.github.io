@@ -1,20 +1,29 @@
 ---
-import type { CollectionEntry } from "astro:content";
-import { ArticleListItem } from "@cieloazul310/astro-sarkara";
-import { dateString } from "../utils";
+/* eslint-disable-next-line import/no-unresolved */
+import { getDataEntryById, type CollectionEntry } from "astro:content";
+import { ArticleListItem, Badge } from "@cieloazul310/astro-sarkara";
+import { dateString, getCategoryColor } from "../utils";
 
 interface Props {
   post: CollectionEntry<"posts">;
 }
 const { post } = Astro.props;
+const category = await getDataEntryById("category", post.data.category.id);
+const categoryType = await getDataEntryById(
+  "categoryType",
+  category.data.type.id,
+);
 ---
 
 <ArticleListItem
-  href={`/posts/${post.slug}`}
+  href={`/${post.slug}`}
   title={post.data.title}
   image={post.data.featuredImg?.src}
   imageAlt={post.data.featuredImgAlt}
-  imagePlaceholder="Post"
+  imagePlaceholder={categoryType.data.name}
 >
+  <Badge colorPalette={getCategoryColor(categoryType.id)} slot="badge">
+    {categoryType.data.name}
+  </Badge>
   <span slot="headerText">{dateString(post.data.date)}</span>
 </ArticleListItem>

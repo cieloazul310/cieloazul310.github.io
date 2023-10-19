@@ -1,0 +1,5 @@
+name: ol-gsi-vt
+type: works
+index: 2
+description: 国土地理院が提供するベクトルタイルを OpenLayers で設定不要で手軽に表示するためのパッケージ
+url: https://cieloazul310.github.io/ol-gsi-vt/

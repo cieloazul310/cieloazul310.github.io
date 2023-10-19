@@ -1,0 +1,69 @@
+---
+/* eslint-disable-next-line import/no-unresolved */
+import { getCollection } from "astro:content";
+import type { InferGetStaticPropsType } from "astro";
+import {
+  SarkaraLayout,
+  ArticleList,
+  Paper,
+  PaperLink,
+  PanelLink,
+  anchor,
+} from "@cieloazul310/astro-sarkara";
+import { css } from "@cieloazul310/sarkara-css/css";
+import PostListItem from "../../components/PostListItem.astro";
+import { menu, siteMetadata } from "../../data";
+
+export async function getStaticPaths() {
+  const allCategories = await getCollection("category");
+  const allCategoryTypes = await getCollection("categoryType");
+  const allPosts = await getCollection("posts", ({ data }) =>
+    import.meta.env.PROD ? data.draft !== true : true,
+  );
+  const sortedPosts = allPosts.sort(
+    (a, b) => b.data.date.getTime() - a.data.date.getTime(),
+  );
+
+  return allCategories.map(({ id, data }) => {
+    const parentCategoryType = allCategoryTypes.find(
+      (categoryType) => data.type.id === categoryType.id,
+    );
+
+    return {
+      params: {
+        category: id,
+      },
+      props: {
+        ...data,
+        type: parentCategoryType,
+        posts: sortedPosts.filter((post) => post.data.category.id === id),
+      },
+    };
+  });
+}
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+const { name, type, posts, description, url } = Astro.props;
+---
+
+<SarkaraLayout title={name} menu={menu} siteMetadata={siteMetadata}>
+  <p slot="jumbotron-header" class={css({ fontWeight: "bold" })}>
+    {type?.data.name}
+  </p>
+  {
+    (description || url) && (
+      <Paper>
+        <p>{description}</p>
+        {url && (
+          <PanelLink class={anchor} href={url}>
+            {name}
+          </PanelLink>
+        )}
+      </Paper>
+    )
+  }
+  <ArticleList>
+    {posts.map((post) => <PostListItem post={post} />)}
+  </ArticleList>
+  {type && <PaperLink href={`/categories/${type.id}`}>{type.data.name}</PaperLink>}
+</SarkaraLayout>

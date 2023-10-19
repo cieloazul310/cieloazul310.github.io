@@ -3,10 +3,8 @@ title: "react-swipeable-views から Swiper への移行"
 date: 2022-11-22T22:30:00+09:00
 lastmod: 2022-11-22T22:30:00+09:00
 draft: false
-keywords: []
-description: ""
 tags: ["React", "MUI", "Swiper"]
-categories: ["JavaScript"]
+category: tech/others
 author: cieloazul310
 ---
 
@@ -16,8 +14,9 @@ author: cieloazul310
 
 ## 先行記事
 
-【React】Swiper + MUI Tab を利用してスワイプでタブ切り替えを行う  
-[https://ramble.impl.co.jp/1959/](https://ramble.impl.co.jp/1959/)
+<PanelLink href="https://ramble.impl.co.jp/1959/">
+  【React】Swiper + MUI Tab を利用してスワイプでタブ切り替えを行う
+</PanelLink>
 
 本記事では以上の記事を大いに参考にしていますが、以下の2点で異なります。
 
@@ -30,8 +29,9 @@ author: cieloazul310
 
 [MUI] (Material-UI) の [Tabs のデモ](https://mui.com/material-ui/react-tabs/#full-width)で紹介されているように React でスワイプを実装するメジャーなライブラリですが、[新たなメンテナーが見つからず](https://github.com/oliviertassinari/react-swipeable-views/issues/558)、2022年10月に非推奨であることが開発者によって明言されました。
 
-Deprecate package, do not use #676  
-[https://github.com/oliviertassinari/react-swipeable-views/issues/676](https://github.com/oliviertassinari/react-swipeable-views/issues/676)
+<PanelLink href="https://github.com/oliviertassinari/react-swipeable-views/issues/676">
+  Deprecate package, do not use #676
+</PanelLink>
 
 ## Swiper
 
@@ -69,15 +69,17 @@ function Page() {
 
 `<Swiper>` コンポーネントが **Swiper のインスタンス**(以降 `SwiperCore` と表記)を生成し、コンポーネント内部でステートを保持する仕組みになっています。
 
-Swiper React Components  
-[https://swiperjs.com/react](https://swiperjs.com/react)
+<PanelLink href="https://swiperjs.com/react">Swiper React Components</PanelLink>
 
 <Ad variant="in-article" />
 
 ## Swiper への移行
 
-ここからは react-swipeable-views が使われている [MUI] の `<Tabs>` コンポーネントの Full Width の例を Swiper で置き換えていきます。  
-[https://mui.com/material-ui/react-tabs/#full-width](https://mui.com/material-ui/react-tabs/#full-width)
+ここからは react-swipeable-views が使われている [MUI] の `<Tabs>` コンポーネントの Full Width の例を Swiper で置き換えていきます。
+
+<PanelLink href="https://mui.com/material-ui/react-tabs/#full-width">
+  Tabs
+</PanelLink>
 
 この例では Swiper 単体で完結するコードとは違って、以下の2点を実装する必要があります。
 
@@ -184,8 +186,9 @@ function FullWidthTabs() {
 }
 ```
 
-デモ (Storybook)  
-[https://cieloazul310.github.io/mui-swiper/?path=/story/swiper--basic](https://cieloazul310.github.io/mui-swiper/?path=/story/swiper--basic)
+<PanelLink href="https://cieloazul310.github.io/mui-swiper/?path=/story/swiper--basic">
+  デモ (Storybook)
+</PanelLink>
 
 ### 解説
 
@@ -276,8 +279,9 @@ swiper?.slideTo(newValue);
 
 `SwiperCore` のメソッドは以下の API リファレンスで確認できます。
 
-Methods & Properties  
-[https://swiperjs.com/swiper-api#methods-and-properties](https://swiperjs.com/swiper-api#methods-and-properties)
+<PanelLink href="https://swiperjs.com/swiper-api#methods-and-properties">
+  Methods & Properties
+</PanelLink>
 
 #### 2. スワイプで操作したスライドと `<Tabs>` の表示を連動させる
 
@@ -318,8 +322,7 @@ Swiper ではマウスによるスライド操作がデフォルトで有効に�
 
 Swiper では Navigation や Pagination など様々なモジュールが用意されています。React で利用するには `<Swiper>` コンポーネントの `modules` props にインポートしたモジュールを配列として指定することで実装できます。
 
-Demos  
-[https://swiperjs.com/demos](https://swiperjs.com/demos)
+<PanelLink href="https://swiperjs.com/demos">Demos</PanelLink>
 
 以下のコードはキーボードによるスライド操作を実装する `Keyboard` モジュールを実装する例です。
 
@@ -345,18 +348,20 @@ function Page() {
 }
 ```
 
-Using JS Modules  
-[https://swiperjs.com/swiper-api#using-js-modules](https://swiperjs.com/swiper-api#using-js-modules)
+<PanelLink href="https://swiperjs.com/swiper-api#using-js-modules">
+  Using JS Modules
+</PanelLink>
 
 ## Storybook による動作デモ
 
 [Storybook](https://storybook.js.org/) で作成したデモページとリポジトリです
 
-動作デモ  
-[https://cieloazul310.github.io/mui-swiper/](https://cieloazul310.github.io/mui-swiper/)
-
-リポジトリ  
-[https://github.com/cieloazul310/mui-swiper](https://github.com/cieloazul310/mui-swiper)
+<PanelLink href="https://cieloazul310.github.io/mui-swiper/">
+  動作デモ
+</PanelLink>
+<PanelLink href="https://github.com/cieloazul310/mui-swiper">
+  リポジトリ
+</PanelLink>
 
 ## リンク
 

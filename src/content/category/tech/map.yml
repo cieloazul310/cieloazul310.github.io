@@ -1,0 +1,5 @@
+name: 地図
+type: tech
+index: 3
+description: |
+  OpenLayersなどの地図に関するJavaScriptライブラリや、ベクトルタイルといった地図に関する技術情報です。

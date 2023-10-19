@@ -1,0 +1,6 @@
+name: 国内のサッカースタジアム周辺の人口
+type: works
+index: 6
+description: |
+  国内のサッカースタジアム周辺の人口を計算して表示するサイト
+url: https://cieloazul310.github.io/gatsby-stadiums-population/

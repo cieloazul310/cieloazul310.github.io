@@ -1,5 +1,5 @@
 
-import { z, defineCollection } from "astro:content";
+import { z, defineCollection, reference } from "astro:content";
 
 const postsCollection = defineCollection({
   type: "content",
@@ -10,7 +10,7 @@ const postsCollection = defineCollection({
       lastmod: z.date().optional(),
       draft: z.boolean().optional(),
       tags: z.array(z.string()),
-      categories: z.array(z.string()),
+      category: reference("category"),
       author: z.string(),
       featuredImg: image()
         .optional()
@@ -23,6 +23,28 @@ const postsCollection = defineCollection({
     }),
 });
 
+const categoryCollection = defineCollection({
+  type: "data",
+  schema: z.object({
+    name: z.string(),
+    type: reference("categoryType"),
+    description: z.string().optional().nullable(),
+    url: z.string().optional().nullable(),
+    index: z.number(),
+  }),
+});
+
+const categoryTypeCollection = defineCollection({
+  type: "data",
+  schema: z.object({
+    name: z.string(),
+    description: z.string().optional().nullable(),
+    categories: z.array(reference("category")),
+  }),
+})
+
 export const collections = {
   posts: postsCollection,
+  category: categoryCollection,
+  categoryType: categoryTypeCollection,
 };
