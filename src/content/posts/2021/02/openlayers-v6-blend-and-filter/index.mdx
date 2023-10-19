@@ -1,0 +1,84 @@
+---
+title: "OpenLayers で地図をグレースケールにしたり乗算合成したり"
+date: 2021-02-01T20:00:00+09:00
+lastmod: 2021-02-01T20:00:00+09:00
+draft: false
+tags: ["OpenLayers", "地図"]
+category: tech/map
+author: cieloazul310
+---
+
+{/* Lead Paragraph */}
+
+[OpenLayers] で地図をグレースケールにしたり、乗算合成する方法です。  
+この記事は [OpenLayers v3 時代に一度書いていましたが](https://qiita.com/cieloazul310/items/473300534e4e506ec0b9)、[2019年11月にリリースされた v6][v6] では CSS で実装可能になっていたので、メモとして残しておきます。
+
+<PanelLink href="https://observablehq.com/@cieloazul310/openlayers-v6-blend-mode-and-filters">デモページ (Observable)</PanelLink>
+
+## v6 の実装方法
+
+v6 での実装は CSS で記述することができます。v5 以前のイベントによる実装に比べるととても簡単になりました。以下がサンプルコードです。
+
+### JavaScript
+
+```js
+import TileLayer from "ol/layer/Tile";
+import XYZSource from "ol/source/XYZ";
+
+// 地理院標準タイル
+const layer = new TileLayer({
+  className: "hoge", // className を設定
+  source: new XYZSource({
+    url: "https://cyberjapandata.gsi.go.jp/xyz/cjstd/{z}/{x}/{y}.png",
+    attribution: "国土地理院",
+  }),
+});
+```
+
+### CSS
+
+```css
+.hoge {
+  mix-blend-mode: multiply;
+  filter: grayScale(1);
+}
+```
+
+以上！
+
+レイヤに className を設定し、CSS で [mix-blend-mode] や [filter] を設定することで、地図の乗算合成やグレースケール化などが簡潔に実装できます。
+
+<Ad variant="in-article" />
+
+## v5 以前の書き方
+
+v5 以前はレイヤにイベントを実装し、レイヤの描写時に canvas の `globalCompositeOperation` 属性をいじることでレイヤの乗算合成やグレースケール化が可能でした。  
+この方法はイベント名を `precompose` → `prerender`、`postcompose` → `postrender` に変更することで v6 でも利用することができます。
+
+```js
+// v5 以前は layer.on('precompose', (event) => {});
+layer.on("prerender", (event) => {
+  // 乗算合成
+  event.context.globalCompositeOperation = "multiply";
+});
+
+// v5 以前は layer.on('postcompose', (event) => {});
+layer.on("postrender", (event) => {
+  // 元に戻す
+  event.context.globalCompositeOperation = "source-over";
+});
+```
+
+{/* Music */}
+
+<YouTube src="lo4KMGiy--Y" />
+So We Won't Forget / Khruangbin (2020)
+
+<Ad variant="display" />
+
+{/* References */}
+
+[v6]: https://github.com/openlayers/openlayers/releases/tag/v6.0.0
+[mix-blend-mode]: https://developer.mozilla.org/ja/docs/Web/CSS/mix-blend-mode
+[filter]: https://developer.mozilla.org/ja/docs/Web/CSS/filter
+[OpenLayers]: http://openlayers.org/ "OpenLayers"

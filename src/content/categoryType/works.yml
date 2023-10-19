@@ -1,4 +1,4 @@
-name: 作ったもの
+name: 制作物
 description: aaa
 categories:
   - works/rockman
@@ -7,3 +7,5 @@ categories:
   - works/wikilayers
   - works/astro-sarkara
   - works/gatsby-aoi
+  - works/stadiums-population
+  - works/canvasmap

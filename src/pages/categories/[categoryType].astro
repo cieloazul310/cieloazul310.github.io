@@ -5,6 +5,7 @@ import type { InferGetStaticPropsType } from "astro";
 import {
   SarkaraLayout,
   Paper,
+  PaperLink,
   Link,
   anchor,
 } from "@cieloazul310/astro-sarkara";
@@ -71,6 +72,9 @@ const { title, categories } = Astro.props as Props;
               {category.data.url}
             </Link>
           )}
+          <div class={css({ display: "flex", flexDirection: "column", mt: 4 })}>
+            <PaperLink href={`/categories/${category.id}`}>記事一覧</PaperLink>
+          </div>
         </Paper>
       ))
     }
