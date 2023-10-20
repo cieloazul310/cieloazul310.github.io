@@ -1,0 +1,15 @@
+---
+/* eslint-disable-next-line import/no-unresolved */
+import { type LocalImageProps } from "astro:assets";
+import { grid } from "@cieloazul310/sarkara-css/patterns";
+import GalleryItem from "./GalleryItem.astro";
+
+interface Props {
+  items: LocalImageProps["src"][];
+}
+const { items } = Astro.props;
+---
+
+<div class={grid({ columns: { base: 2, md: 3 } })}>
+  {items.map((item, index) => <GalleryItem item={item} index={index} />)}
+</div>

@@ -1,0 +1,38 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { Link } from "@cieloazul310/astro-sarkara";
+import { css } from "@cieloazul310/sarkara-css/css";
+
+type Props = HTMLAttributes<"iframe"> & {
+  heightMax?: boolean;
+};
+const {
+  src,
+  loading = "lazy",
+  height = "480px",
+  heightMax = false,
+  ...props
+} = Astro.props;
+---
+
+<figure class={css({ my: 8 })}>
+  <iframe
+    class:list={[
+      css({
+        width: "100%",
+        maxWidth: "100%",
+        rounded: "xl",
+      }),
+      {
+        [css({ height: "calc(100vh - token(sizes.headerHeight))" })]: heightMax,
+      },
+    ]}
+    src={src}
+    loading={loading}
+    height={height}
+    {...props}
+  >
+    <p>Your Browser do not support iframe.</p>
+  </iframe>
+  <figcaption><Link href={src}>新しいタブで開く</Link></figcaption>
+</figure>

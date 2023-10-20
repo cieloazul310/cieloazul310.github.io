@@ -1,0 +1,22 @@
+---
+/* eslint-disable-next-line import/no-unresolved */
+import { getImage, type LocalImageProps } from "astro:assets";
+import { css } from "@cieloazul310/sarkara-css/css";
+
+interface Props {
+  item: LocalImageProps["src"];
+  index: number;
+}
+const { item, index } = Astro.props;
+const image = await getImage({ src: item });
+---
+
+<a
+  class={css({ _hover: { filter: "brightness(1.2)" } })}
+  href={image.src}
+  target="_blank"
+>
+  <div class={css({ aspectRatio: 1, position: "relative" })}>
+    <img class={css({ objectFit: "cover", width: "100%", height: "100%" })} src={image.src} alt={`gallery-${index}`} />
+  </div>
+</a>
