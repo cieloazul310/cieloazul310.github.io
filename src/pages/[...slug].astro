@@ -13,6 +13,8 @@ import {
   useNavigation,
 } from "@cieloazul310/astro-sarkara";
 import { css } from "@cieloazul310/sarkara-css/css";
+import Gallery from "../components/Gallery.astro";
+import Iframe from "../components/Iframe.astro";
 import YouTube from "../components/YouTube.astro";
 import Analytics from "../components/Analytics.astro";
 import Ad from "../components/ads/Ad.astro";
@@ -82,7 +84,7 @@ const { Content } = await entry.render();
         </Alert>
       )
     }
-    <Content components={{ YouTube, PanelLink, Alert, Ad, Twitter, a: Link }} />
+    <Content components={{ Gallery, Iframe, YouTube, PanelLink, Alert, Ad, Twitter, a: Link }} />
   </Paper>
   <Paper>
     <footer>
