@@ -3,15 +3,16 @@ import { cx, css } from "@cieloazul310/sarkara-css/css";
 
 interface Props {
   variant?: "display" | "in-article";
+  disableMargin?: boolean;
 }
-const { variant = "display" } = Astro.props;
+const { variant = "display", disableMargin = false } = Astro.props;
 const inArticleStyle = css({ my: 8 });
 ---
 
 <div
   class:list={[
     css({ maxWidth: "100%", overflow: "hidden" }),
-    { [inArticleStyle]: variant === "in-article" },
+    { [inArticleStyle]: !disableMargin },
   ]}
 >
   <span class={css({ display: "block", fontSize: "sm" })}>広告</span>

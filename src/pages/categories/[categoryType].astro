@@ -2,15 +2,9 @@
 /* eslint-disable-next-line import/no-unresolved */
 import { getCollection } from "astro:content";
 import type { InferGetStaticPropsType } from "astro";
-import {
-  SarkaraLayout,
-  Paper,
-  PaperLink,
-  Link,
-  anchor,
-} from "@cieloazul310/astro-sarkara";
-import { css } from "@cieloazul310/sarkara-css/css";
+import { SarkaraLayout } from "@cieloazul310/astro-sarkara";
 import { vstack } from "@cieloazul310/sarkara-css/patterns";
+import Category from "../../components/Category.astro";
 import { menu, siteMetadata } from "../../data";
 
 export async function getStaticPaths() {
@@ -47,35 +41,7 @@ const { title, categories } = Astro.props as Props;
   <div class={vstack({ gap: 4, alignItems: "stretch" })}>
     {
       categories.map((category) => (
-        <Paper as="article">
-          <h1
-            class={css({
-              textStyle: "headings",
-              fontSize: ["lg", "xl", "2xl"],
-              mb: 2,
-            })}
-          >
-            <Link
-              className={css({
-                _hover: {
-                  textDecoration: "underline",
-                },
-              })}
-              href={`/categories/${category.id}`}
-            >
-              {category.data.name}
-            </Link>
-          </h1>
-          {category.data.description && <p>{category.data.description}</p>}
-          {category.data.url && (
-            <Link class={anchor} href={category.data.url}>
-              {category.data.url}
-            </Link>
-          )}
-          <div class={css({ display: "flex", flexDirection: "column", mt: 4 })}>
-            <PaperLink href={`/categories/${category.id}`}>記事一覧</PaperLink>
-          </div>
-        </Paper>
+        <Category category={category} />
       ))
     }
   </div>
