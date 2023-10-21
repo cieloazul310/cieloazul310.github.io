@@ -12,7 +12,7 @@ const image = await getImage({ src: item });
 ---
 
 <a
-  class={css({ _hover: { filter: "brightness(1.2)" } })}
+  class={css({ transition: "transform .25s", _hover: { transform: "scale(1.05)" } })}
   href={image.src}
   target="_blank"
 >

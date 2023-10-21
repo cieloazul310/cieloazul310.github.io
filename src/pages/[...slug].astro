@@ -1,18 +1,19 @@
 ---
 /* eslint-disable-next-line import/no-unresolved */
-import { getCollection, getEntry } from "astro:content";
+import { getCollection, getEntry, getDataEntryById } from "astro:content";
 import type { InferGetStaticPropsType } from "astro";
 import {
   SarkaraLayout,
   Paper,
-  PaperLink,
   PanelLink,
   Alert,
+  Badge,
   Navigation,
   Link,
   useNavigation,
 } from "@cieloazul310/astro-sarkara";
 import { css } from "@cieloazul310/sarkara-css/css";
+import { flex } from "@cieloazul310/sarkara-css/patterns";
 import Gallery from "../components/Gallery.astro";
 import Iframe from "../components/Iframe.astro";
 import YouTube from "../components/YouTube.astro";
@@ -21,8 +22,9 @@ import Ad from "../components/ads/Ad.astro";
 import AdScript from "../components/ads/Script.astro";
 import Twitter from "../components/twitter/Twitter.astro";
 import TwitterScript from "../components/twitter/Script.astro";
+import Category from "../components/Category.astro";
 import { siteMetadata, menu } from "../data";
-import { dateString } from "../utils";
+import { dateString, getCategoryColor } from "../utils";
 
 export async function getStaticPaths() {
   const allPosts = await getCollection("posts", ({ data }) =>
@@ -60,6 +62,8 @@ const navigation = useNavigation(
   },
 );
 const entry = await getEntry("posts", post.slug);
+const category = await getDataEntryById("category", post.data.category.id);
+const categoryType = await getDataEntryById("categoryType", category.data.type.id);
 const { Content } = await entry.render();
 ---
 
@@ -84,22 +88,50 @@ const { Content } = await entry.render();
         </Alert>
       )
     }
-    <Content components={{ Gallery, Iframe, YouTube, PanelLink, Alert, Ad, Twitter, a: Link }} />
+    <Content
+      components={{
+        Gallery,
+        Iframe,
+        YouTube,
+        PanelLink,
+        Alert,
+        Ad,
+        Twitter,
+        a: Link,
+      }}
+    />
   </Paper>
   <Paper>
     <footer>
       <hgroup>
-        <p>{dateString(entry.data.date)}</p>
+        <p
+          class={flex({
+            gap: { base: 0, md: 2 },
+            direction: { base: "column", md: "row" },
+          })}
+        >
+          <storng>{dateString(entry.data.date)}</storng>
+          {
+            entry.data.lastmod && entry.data.date.getTime() !== entry.data.lastmod.getTime() && (
+              <em class={css({ fontStyle: "italic" })}>
+                最終更新日{dateString(entry.data.lastmod)}
+              </em>
+            )
+          }
+        </p>
         <h2
-          class={css({ textStyle: "headings", fontSize: ["lg", "lg", "xl"] })}
+          class={css({ textStyle: "headings", fontSize: ["lg", "xl", "2xl"] })}
         >
           {post.data.title}
         </h2>
       </hgroup>
+      <p><Badge colorPalette={getCategoryColor(categoryType.id)} slot="badge">
+    {categoryType.data.name}
+  </Badge></p>
     </footer>
   </Paper>
+  <Category category={category} />
   <Navigation {...navigation} />
-  <PaperLink href="/posts">Posts Top</PaperLink>
   <Navigation {...navigation} direction="column" slot="sidebar-top" />
   <Fragment slot="bottom-of-body">
     <TwitterScript />

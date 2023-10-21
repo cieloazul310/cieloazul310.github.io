@@ -1,8 +1,9 @@
 ---
 /* eslint-disable-next-line import/no-unresolved */
 import { getDataEntryById, type CollectionEntry } from "astro:content";
-import { ArticleListItem, Badge } from "@cieloazul310/astro-sarkara";
-import { dateString, getCategoryColor } from "../utils";
+import { ArticleListItem } from "@cieloazul310/astro-sarkara";
+import CategoryTypeBadge from "./CategoryTypeBadge.astro";
+import { dateString } from "../utils";
 
 interface Props {
   post: CollectionEntry<"posts">;
@@ -22,8 +23,6 @@ const categoryType = await getDataEntryById(
   imageAlt={post.data.featuredImgAlt}
   imagePlaceholder={categoryType.data.name}
 >
-  <Badge colorPalette={getCategoryColor(categoryType.id)} slot="badge">
-    {categoryType.data.name}
-  </Badge>
+  <CategoryTypeBadge slot="badge" categoryType={categoryType} />
   <span slot="headerText">{dateString(post.data.date)}</span>
 </ArticleListItem>
