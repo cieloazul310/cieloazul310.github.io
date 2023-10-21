@@ -81,7 +81,6 @@ jobs:
         with:
           repository: cieloazul310/map310-contents
           path: ${{ env.CLONED_PATH }}
-          fetch-depth: 0
           token: ${{ secrets.PAT }}      
 
       - name: Move to content collection
