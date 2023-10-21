@@ -10,6 +10,6 @@ interface Props {
 const { items } = Astro.props;
 ---
 
-<div class={grid({ columns: { base: 2, md: 3 } })}>
+<div class={grid({ my: 8, columns: { base: 2, md: 3 } })}>
   {items.map((item, index) => <GalleryItem item={item} index={index} />)}
 </div>

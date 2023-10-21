@@ -18,8 +18,12 @@ export const menu = defineMenu([
     ],
   },
   {
-    title: "作ったもの",
-    items: [{ title: "作ったもの", href: "/categories/works" }],
+    title: "制作物",
+    items: [{ title: "制作物", href: "/categories/works" }],
+  },
+  {
+    title: "ブログ",
+    items: [{ title: "ブログ", href: "/categories/blog" }],
   },
 ]);
 export const pageSize = 25;
