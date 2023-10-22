@@ -3,12 +3,13 @@
   "type": "module",
   "version": "0.0.4",
   "scripts": {
-    "prepare": "panda codegen && astro sync",
+    "prepare": "panda codegen && astro sync && git config --local core.hooksPath .githooks",
     "dev": "astro dev",
     "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "lint-staged": "lint-staged"
   },
   "dependencies": {
     "@cieloazul310/astro-sarkara": "^0.0.12",
@@ -28,7 +29,14 @@
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-astro": "^0.29.1",
     "eslint-plugin-import": "^2.28.1",
+    "lint-staged": "^15.0.2",
     "prettier": "^3.0.3",
     "prettier-plugin-astro": "^0.12.0"
+  },
+  "lint-staged": {
+    "src/**/*.{ts,astro}": [
+      "eslint --fix",
+      "prettier --write"
+    ]
   }
 }

@@ -1,6 +1,6 @@
 ---
 import type { HTMLAttributes } from "astro/types";
-import { Link } from "@cieloazul310/astro-sarkara";
+import { Link, isInternal, useAbsoluteUrl } from "@cieloazul310/astro-sarkara";
 import { css } from "@cieloazul310/sarkara-css/css";
 
 type Props = HTMLAttributes<"iframe"> & {
@@ -13,6 +13,7 @@ const {
   heightMax = false,
   ...props
 } = Astro.props;
+const href = isInternal(src) ? useAbsoluteUrl(src) : src;
 ---
 
 <figure class={css({ my: 8 })}>
@@ -34,5 +35,5 @@ const {
   >
     <p>Your Browser do not support iframe.</p>
   </iframe>
-  <figcaption><Link href={src}>新しいタブで開く</Link></figcaption>
+  <figcaption><Link href={href}>新しいタブで開く</Link></figcaption>
 </figure>
