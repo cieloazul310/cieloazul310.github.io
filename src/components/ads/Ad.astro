@@ -15,6 +15,11 @@ const inArticleStyle = css({ my: 8 });
     { [inArticleStyle]: !disableMargin },
   ]}
 >
+  <script
+    async
+    is:inline
+    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7323207940463794"
+    crossorigin="anonymous"></script>
   <span class={css({ display: "block", fontSize: "sm" })}>広告</span>
   {
     variant === "display" && (
@@ -41,4 +46,7 @@ const inArticleStyle = css({ my: 8 });
       />
     )
   }
+  <script is:inline>
+    (adsbygoogle = window.adsbygoogle || []).push({});
+  </script>
 </div>

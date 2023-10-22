@@ -19,9 +19,7 @@ import Iframe from "../components/Iframe.astro";
 import YouTube from "../components/YouTube.astro";
 import Analytics from "../components/Analytics.astro";
 import Ad from "../components/ads/Ad.astro";
-import AdScript from "../components/ads/Script.astro";
 import Twitter from "../components/twitter/Twitter.astro";
-import TwitterScript from "../components/twitter/Script.astro";
 import Category from "../components/Category.astro";
 import { siteMetadata, menu } from "../data";
 import { dateString, getCategoryColor } from "../utils";
@@ -63,7 +61,10 @@ const navigation = useNavigation(
 );
 const entry = await getEntry("posts", post.slug);
 const category = await getDataEntryById("category", post.data.category.id);
-const categoryType = await getDataEntryById("categoryType", category.data.type.id);
+const categoryType = await getDataEntryById(
+  "categoryType",
+  category.data.type.id,
+);
 const { Content } = await entry.render();
 ---
 
@@ -112,11 +113,12 @@ const { Content } = await entry.render();
         >
           <storng>{dateString(entry.data.date)}</storng>
           {
-            entry.data.lastmod && entry.data.date.getTime() !== entry.data.lastmod.getTime() && (
-              <em class={css({ fontStyle: "italic" })}>
-                最終更新日{dateString(entry.data.lastmod)}
-              </em>
-            )
+            entry.data.lastmod &&
+              entry.data.date.getTime() !== entry.data.lastmod.getTime() && (
+                <em class={css({ fontStyle: "italic" })}>
+                  最終更新日{dateString(entry.data.lastmod)}
+                </em>
+              )
           }
         </p>
         <h2
@@ -125,16 +127,14 @@ const { Content } = await entry.render();
           {post.data.title}
         </h2>
       </hgroup>
-      <p><Badge colorPalette={getCategoryColor(categoryType.id)} slot="badge">
-    {categoryType.data.name}
-  </Badge></p>
+      <p>
+        <Badge colorPalette={getCategoryColor(categoryType.id)} slot="badge">
+          {categoryType.data.name}
+        </Badge>
+      </p>
     </footer>
   </Paper>
   <Category category={category} />
   <Navigation {...navigation} />
   <Navigation {...navigation} direction="column" slot="sidebar-top" />
-  <Fragment slot="bottom-of-body">
-    <TwitterScript />
-    <AdScript />
-  </Fragment>
 </SarkaraLayout>
