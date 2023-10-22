@@ -4,7 +4,16 @@
 #
 name: Checkout test
 
-on:  
+on:
+  pull_request:
+    types: [opened, synchronize]
+    branches: [main]
+    paths:
+      - src/**/*
+      - package.json
+      - astro.config.ts
+      - panda.config.ts
+
   repository_dispatch:
     types: [update_contents]
 
