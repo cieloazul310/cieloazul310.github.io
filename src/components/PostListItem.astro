@@ -20,7 +20,7 @@ const categoryType = await getDataEntryById(
   href={`/${post.slug}`}
   title={post.data.title}
   image={post.data.featuredImg?.src}
-  imageAlt={post.data.featuredImgAlt}
+  imageAlt={post.data.featuredImgAlt ?? post.data.title}
   imagePlaceholder={categoryType.data.name}
 >
   <CategoryTypeBadge slot="badge" categoryType={categoryType} />
