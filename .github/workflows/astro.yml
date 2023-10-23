@@ -94,6 +94,11 @@ jobs:
           ${{ steps.detect-package-manager.outputs.runner }} astro sync
           ls src/content/posts
 
+      - name: Type checking
+        run: |
+          ${{ steps.detect-package-manager.outputs.runner }} check
+        working-directory: ${{ env.BUILD_PATH }}
+
       - name: Build with Astro
         run: |
           ${{ steps.detect-package-manager.outputs.runner }} astro build \
