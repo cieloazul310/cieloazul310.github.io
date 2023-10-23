@@ -2,5 +2,5 @@ name: Panda CSS
 type: tech
 index: 2
 description: |
-  Panda CSSはCSS-in-JSの新しいパッケージです。
+  Panda CSSは型安全を保ちながらスタイルを記述することができるCSS-in-JSのパッケージです。
 url: https://panda-css.com/
