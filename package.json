@@ -6,7 +6,7 @@
     "prepare": "panda codegen && astro sync && git config --local core.hooksPath .githooks",
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "astro build",
+    "build": "astro check && astro build",
     "preview": "astro preview",
     "astro": "astro",
     "lint-staged": "lint-staged"
@@ -17,6 +17,7 @@
     "rehype-class-names": "^1.0.14"
   },
   "devDependencies": {
+    "@astrojs/check": "^0.2.1",
     "@astrojs/mdx": "^1.1.2",
     "@astrojs/partytown": "^2.0.1",
     "@pandacss/astro": "^0.16.0",

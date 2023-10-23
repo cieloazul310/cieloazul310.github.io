@@ -1,6 +1,6 @@
 name: Canvas Map
 type: works
-index: 7
+index: 70
 description: |
   データビジュアライゼーションのための地図画像を生成するモジュール
 url: https://github.com/cieloazul310/canvasmap

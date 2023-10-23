@@ -1,6 +1,7 @@
 name: 制作物
 description: aaa
 categories:
+  - works/map310
   - works/rockman
   - works/jclub-financial-table
   - works/ol-gsi-vt
@@ -9,4 +10,5 @@ categories:
   - works/gatsby-aoi
   - works/stadiums-population
   - works/canvasmap
+  - works/railroad-timeline-map
   - works/others

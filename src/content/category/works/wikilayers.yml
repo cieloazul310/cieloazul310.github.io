@@ -1,6 +1,6 @@
 name: WikiLayers
 type: works
-index: 5
+index: 50
 description: |
   Wikipediaから座標を取得し、地図で表示するWebアプリケーション
 url: https://cieloazul310.github.io/wikilayers/
