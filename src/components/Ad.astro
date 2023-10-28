@@ -6,7 +6,7 @@ interface Props {
   disableMargin?: boolean;
 }
 const { variant = "display", disableMargin = false } = Astro.props;
-const inArticleStyle = css({ my: 8 });
+const inArticleStyle = css({ my: "lg" });
 ---
 
 <div
@@ -17,7 +17,6 @@ const inArticleStyle = css({ my: 8 });
 >
   <script
     async
-    is:inline
     src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7323207940463794"
     crossorigin="anonymous"></script>
   <span class={css({ display: "block", fontSize: "sm" })}>広告</span>
