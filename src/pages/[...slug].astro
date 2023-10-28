@@ -5,21 +5,15 @@ import type { InferGetStaticPropsType } from "astro";
 import {
   SarkaraLayout,
   Paper,
-  PanelLink,
   Alert,
   Badge,
   Navigation,
-  Link,
   useNavigation,
 } from "@cieloazul310/astro-sarkara";
 import { css } from "@cieloazul310/sarkara-css/css";
 import { flex } from "@cieloazul310/sarkara-css/patterns";
-import Gallery from "../components/Gallery.astro";
-import Iframe from "../components/Iframe.astro";
-import YouTube from "../components/YouTube.astro";
+import shortcodes from "../components/shortcodes";
 import Analytics from "../components/Analytics.astro";
-import Ad from "../components/ads/Ad.astro";
-import Twitter from "../components/twitter/Twitter.astro";
 import Category from "../components/Category.astro";
 import { siteMetadata, menu } from "../data";
 import { dateString, getCategoryColor } from "../utils";
@@ -89,18 +83,7 @@ const { Content } = await entry.render();
         </Alert>
       )
     }
-    <Content
-      components={{
-        Gallery,
-        Iframe,
-        YouTube,
-        PanelLink,
-        Alert,
-        Ad,
-        Twitter,
-        a: Link,
-      }}
-    />
+    <Content components={{ ...shortcodes }} />
   </Paper>
   <Paper>
     <footer>
