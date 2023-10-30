@@ -19,7 +19,7 @@ const categoryType = await getDataEntryById(
 <ArticleListItem
   href={`/${post.slug}`}
   title={post.data.title}
-  image={post.data.featuredImg?.src}
+  astroImage={post.data.featuredImg}
   imageAlt={post.data.featuredImgAlt ?? post.data.title}
   imagePlaceholder={categoryType.data.name}
 >
