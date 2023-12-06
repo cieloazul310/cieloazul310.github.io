@@ -12,7 +12,7 @@
     "lint-staged": "lint-staged"
   },
   "dependencies": {
-    "@cieloazul310/astro-sarkara": "^1.0.1",
+    "@cieloazul310/astro-sarkara": "^1.1.0",
     "astro": "^3.4.0",
     "rehype-class-names": "^1.0.14"
   },
