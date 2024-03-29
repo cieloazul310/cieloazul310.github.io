@@ -71,10 +71,9 @@ jobs:
 
       - name: Move to content collection
         run: |
-          rm -rf src/content/posts
-          mv ${{ env.CLONED_PATH }}/content src/content/posts
+          mv ${{ env.CLONED_PATH }}/content/* src/content
           ${{ steps.detect-package-manager.outputs.runner }} astro sync
-          ls src/content/posts
+          ls src/content
   
       - name: Type checking
         run: |
