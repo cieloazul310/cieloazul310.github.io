@@ -18,6 +18,7 @@ export default defineConfig({
     }),
   ],
   markdown: {
+    // @ts-expect-error
     rehypePlugins: [[rehypeClassNames, rehypeClassNamesOptions]],
   },
 });
