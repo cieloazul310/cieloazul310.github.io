@@ -16,26 +16,30 @@ import { menu, siteMetadata } from "../../data";
 
 export async function getStaticPaths() {
   const allCategories = await getCollection("category");
- 
-  return allCategories.map((category) => 
-    ({
-      params: {
-        category: category.id,
-      },
-      props: {
-        category,
-      },
-    })
-  );
+
+  return allCategories.map((category) => ({
+    params: {
+      category: category.id,
+    },
+    props: {
+      category,
+    },
+  }));
 }
 
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 const { category } = Astro.props;
 
 const { name, description, url } = category.data;
-const categoryType = await getDataEntryById("categoryType", category.data.type.id);
-const allPosts = await getCollection("posts", (post) => 
-  (post.data.category.id === category.id) && (import.meta.env.PROD ? post.data.draft !== true : true)
+const categoryType = await getDataEntryById(
+  "categoryType",
+  category.data.type.id,
+);
+const allPost = await getCollection(
+  "post",
+  (post) =>
+    post.data.category.id === category.id &&
+    (import.meta.env.PROD ? post.data.draft !== true : true),
 );
 ---
 
@@ -54,9 +58,13 @@ const allPosts = await getCollection("posts", (post) =>
     )
   }
   <ArticleList>
-    {allPosts.sort(
-  (a, b) => b.data.date.getTime() - a.data.date.getTime(),
-).map((post) => <PostListItem post={post} />)}
+    {
+      allPost
+        .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+        .map((post) => <PostListItem post={post} />)
+    }
   </ArticleList>
-  <PaperLink href={`/categories/${categoryType.id}`}>{categoryType.data.name}</PaperLink>
+  <PaperLink href={`/categories/${categoryType.id}`}
+    >{categoryType.data.name}</PaperLink
+  >
 </SarkaraLayout>

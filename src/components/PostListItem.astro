@@ -6,7 +6,7 @@ import CategoryTypeBadge from "./CategoryTypeBadge.astro";
 import { dateString } from "../utils";
 
 interface Props {
-  post: CollectionEntry<"posts">;
+  post: CollectionEntry<"post">;
 }
 const { post } = Astro.props;
 const category = await getDataEntryById("category", post.data.category.id);
