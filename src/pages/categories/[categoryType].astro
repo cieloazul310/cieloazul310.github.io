@@ -19,7 +19,11 @@ export async function getStaticPaths() {
       .filter((category) =>
         includedCategoriesIdCollection.includes(category.id),
       )
-      .sort((a, b) => a.data.index - b.data.index);
+      .sort(
+        (a, b) =>
+          includedCategoriesIdCollection.indexOf(a.id) -
+          includedCategoriesIdCollection.indexOf(b.id),
+      );
 
     return {
       params: {
@@ -39,10 +43,6 @@ const { title, categories } = Astro.props as Props;
 
 <SarkaraLayout title={title} menu={menu} siteMetadata={siteMetadata}>
   <div class={vstack({ gap: 4, alignItems: "stretch" })}>
-    {
-      categories.map((category) => (
-        <Category category={category} />
-      ))
-    }
+    {categories.map((category) => <Category category={category} />)}
   </div>
 </SarkaraLayout>
