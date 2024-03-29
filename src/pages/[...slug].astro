@@ -19,11 +19,11 @@ import { siteMetadata, menu } from "../data";
 import { dateString, getCategoryColor } from "../utils";
 
 export async function getStaticPaths() {
-  const allPosts = await getCollection("posts", ({ data }) =>
+  const allPost = await getCollection("post", ({ data }) =>
     import.meta.env.PROD ? data.draft !== true : true,
   );
 
-  return allPosts
+  return allPost
     .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
     .map((post, index, arr) => {
       const left = index !== 0 ? arr[index - 1] : null;
@@ -53,7 +53,7 @@ const navigation = useNavigation(
     secondaryText: (obj) => dateString(obj.data.date),
   },
 );
-const entry = await getEntry("posts", post.slug);
+const entry = await getEntry("post", post.slug);
 const category = await getDataEntryById("category", post.data.category.id);
 const categoryType = await getDataEntryById(
   "categoryType",
