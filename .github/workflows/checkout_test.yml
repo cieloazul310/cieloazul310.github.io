@@ -75,11 +75,10 @@ jobs:
           rm -rf ${{ env.BUILD_PATH }}/src/content
           mv ${{ env.CLONED_PATH }}/src ${{ env.BUILD_PATH }}/src/content
           tree ${{ env.BUILD_PATH }}/src/content
-        
-        # ${{ steps.detect-package-manager.outputs.runner }} astro sync
   
       - name: Type checking
         run: |
+          ${{ steps.detect-package-manager.outputs.runner }} astro sync
           ${{ steps.detect-package-manager.outputs.runner }} astro check
         working-directory: ${{ env.BUILD_PATH }}
     
