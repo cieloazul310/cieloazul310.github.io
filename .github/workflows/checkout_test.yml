@@ -71,7 +71,9 @@ jobs:
 
       - name: Move to content collection
         run: |
-          mv -f ${{ env.CLONED_PATH }}/content/* src/content
+          cp src/content/config.ts ${{ env.CLONED_PATH }}/content
+          rm -rf src/content
+          mv ${{ env.CLONED_PATH }}/content src/content
           ${{ steps.detect-package-manager.outputs.runner }} astro sync
           ls src/content
   
