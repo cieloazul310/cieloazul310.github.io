@@ -71,11 +71,11 @@ jobs:
 
       - name: Move to content collection
         run: |
-          cp src/content/config.ts ${{ env.CLONED_PATH }}/content
-          rm -rf src/content
-          mv ${{ env.CLONED_PATH }}/content src/content
+          cp ${{ env.BUILD_PATH }}/src/content/config.ts ${{ env.CLONED_PATH }}/content
+          rm -rf ${{ env.BUILD_PATH }}/src/content
+          mv ${{ env.CLONED_PATH }}/content ${{ env.BUILD_PATH }}/src/content
+          tree ${{ env.BUILD_PATH }}/src/content
           ${{ steps.detect-package-manager.outputs.runner }} astro sync
-          tree src/content
   
       - name: Type checking
         run: |
