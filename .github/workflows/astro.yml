@@ -92,7 +92,7 @@ jobs:
           cp src/content/config.ts ${{ env.CLONED_PATH }}/content
           rm -rf src/content
           mv ${{ env.CLONED_PATH }}/content src/content
-          ls src/content
+          tree src/content
 
       - name: Type checking
         run: |

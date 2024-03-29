@@ -75,7 +75,7 @@ jobs:
           rm -rf src/content
           mv ${{ env.CLONED_PATH }}/content src/content
           ${{ steps.detect-package-manager.outputs.runner }} astro sync
-          ls src/content
+          tree src/content
   
       - name: Type checking
         run: |
