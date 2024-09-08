@@ -1,6 +1,6 @@
 ---
 /* eslint-disable-next-line import/no-unresolved */
-import { getCollection, getDataEntryById } from "astro:content";
+import { getCollection, getEntry } from "astro:content";
 import type { InferGetStaticPropsType } from "astro";
 import {
   SarkaraLayout,
@@ -8,11 +8,13 @@ import {
   Paper,
   PaperLink,
   PanelLink,
-  anchor,
 } from "@cieloazul310/astro-sarkara";
-import PostListItem from "../../components/PostListItem.astro";
-import CategoryTypeBadge from "../../components/CategoryTypeBadge.astro";
-import { menu, siteMetadata } from "../../data";
+import PostListItem from "@/components/PostListItem.astro";
+import CategoryTypeBadge from "@/components/CategoryTypeBadge.astro";
+import { menu, siteMetadata } from "@/data";
+import mdxClasses from "@/mdx-classes";
+
+import "@/index.css";
 
 export async function getStaticPaths() {
   const allCategories = await getCollection("category");
@@ -31,10 +33,7 @@ type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 const { category } = Astro.props;
 
 const { name, description, url } = category.data;
-const categoryType = await getDataEntryById(
-  "categoryType",
-  category.data.type.id,
-);
+const categoryType = await getEntry("categoryType", category.data.type.id);
 const allPost = await getCollection(
   "post",
   (post) =>
@@ -50,7 +49,7 @@ const allPost = await getCollection(
       <Paper>
         <p>{description}</p>
         {url && (
-          <PanelLink class={anchor} href={url}>
+          <PanelLink class={mdxClasses.a} href={url}>
             {name}
           </PanelLink>
         )}

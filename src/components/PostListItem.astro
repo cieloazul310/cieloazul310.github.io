@@ -1,19 +1,16 @@
 ---
 /* eslint-disable-next-line import/no-unresolved */
-import { getDataEntryById, type CollectionEntry } from "astro:content";
+import { getEntry, type CollectionEntry } from "astro:content";
 import { ArticleListItem } from "@cieloazul310/astro-sarkara";
+import { dateString } from "@/utils";
 import CategoryTypeBadge from "./CategoryTypeBadge.astro";
-import { dateString } from "../utils";
 
 interface Props {
   post: CollectionEntry<"post">;
 }
 const { post } = Astro.props;
-const category = await getDataEntryById("category", post.data.category.id);
-const categoryType = await getDataEntryById(
-  "categoryType",
-  category.data.type.id,
-);
+const category = await getEntry("category", post.data.category.id);
+const categoryType = await getEntry("categoryType", category.data.type.id);
 ---
 
 <ArticleListItem

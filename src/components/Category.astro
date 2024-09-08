@@ -1,7 +1,8 @@
 ---
 import type { CollectionEntry } from "astro:content";
-import { Paper, Link, PaperLink, anchor } from "@cieloazul310/astro-sarkara";
-import { css } from "@cieloazul310/sarkara-css/css";
+import { Paper, Link, PaperLink } from "@cieloazul310/astro-sarkara";
+import { css } from "styled-system/css";
+import mdxClasses from "@/mdx-classes";
 
 interface Props {
   category: CollectionEntry<"category">;
@@ -31,7 +32,7 @@ const { category } = Astro.props;
   {category.data.description && <p>{category.data.description}</p>}
   {
     category.data.url && (
-      <Link class={anchor} href={category.data.url}>
+      <Link class={mdxClasses.a} href={category.data.url}>
         {category.data.url}
       </Link>
     )
