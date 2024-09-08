@@ -19,6 +19,7 @@
     "rehype-class-names": "^2.0.0"
   },
   "devDependencies": {
+    "@astrojs/check": "^0.9.3",
     "@astrojs/mdx": "^3.1.5",
     "@astrojs/partytown": "^2.1.2",
     "@pandacss/dev": "^0.45.2",
