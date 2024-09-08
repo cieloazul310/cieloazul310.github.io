@@ -8,11 +8,13 @@ import {
   Paper,
   PaperLink,
   PanelLink,
-  anchor,
 } from "@cieloazul310/astro-sarkara";
-import PostListItem from "../../components/PostListItem.astro";
-import CategoryTypeBadge from "../../components/CategoryTypeBadge.astro";
-import { menu, siteMetadata } from "../../data";
+import PostListItem from "@/components/PostListItem.astro";
+import CategoryTypeBadge from "@/components/CategoryTypeBadge.astro";
+import { menu, siteMetadata } from "@/data";
+import mdxClasses from "@/mdx-classes";
+
+import "@/index.css";
 
 export async function getStaticPaths() {
   const allCategories = await getCollection("category");
@@ -50,7 +52,7 @@ const allPost = await getCollection(
       <Paper>
         <p>{description}</p>
         {url && (
-          <PanelLink class={anchor} href={url}>
+          <PanelLink class={mdxClasses.a} href={url}>
             {name}
           </PanelLink>
         )}

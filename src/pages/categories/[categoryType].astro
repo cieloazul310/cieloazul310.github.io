@@ -3,9 +3,11 @@
 import { getCollection } from "astro:content";
 import type { InferGetStaticPropsType } from "astro";
 import { SarkaraLayout } from "@cieloazul310/astro-sarkara";
-import { vstack } from "@cieloazul310/sarkara-css/patterns";
-import Category from "../../components/Category.astro";
-import { menu, siteMetadata } from "../../data";
+import { vstack } from "styled-system/patterns";
+import Category from "@/components/Category.astro";
+import { menu, siteMetadata } from "@/data";
+
+import "@/index.css";
 
 export async function getStaticPaths() {
   const allCategoryTypes = await getCollection("categoryType");

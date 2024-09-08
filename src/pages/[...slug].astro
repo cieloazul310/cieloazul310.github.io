@@ -1,6 +1,6 @@
 ---
 /* eslint-disable-next-line import/no-unresolved */
-import { getCollection, getEntry, getDataEntryById } from "astro:content";
+import { getCollection, getEntry } from "astro:content";
 import type { InferGetStaticPropsType } from "astro";
 import {
   SarkaraLayout,
@@ -10,13 +10,15 @@ import {
   Navigation,
   useNavigation,
 } from "@cieloazul310/astro-sarkara";
-import { css } from "@cieloazul310/sarkara-css/css";
-import { flex } from "@cieloazul310/sarkara-css/patterns";
-import shortcodes from "../components/shortcodes";
-import Analytics from "../components/Analytics.astro";
-import Category from "../components/Category.astro";
-import { siteMetadata, menu } from "../data";
-import { dateString, getCategoryColor } from "../utils";
+import { css } from "styled-system/css";
+import { flex } from "styled-system/patterns";
+import shortcodes from "@/components/shortcodes";
+import Analytics from "@/components/Analytics.astro";
+import Category from "@/components/Category.astro";
+import { siteMetadata, menu } from "@/data";
+import { dateString, getCategoryColor } from "@/utils";
+
+import "@/index.css";
 
 export async function getStaticPaths() {
   const allPost = await getCollection("post", ({ data }) =>
@@ -54,11 +56,8 @@ const navigation = useNavigation(
   },
 );
 const entry = await getEntry("post", post.slug);
-const category = await getDataEntryById("category", post.data.category.id);
-const categoryType = await getDataEntryById(
-  "categoryType",
-  category.data.type.id,
-);
+const category = await getEntry("category", post.data.category.id);
+const categoryType = await getEntry("categoryType", category.data.type.id);
 const { Content } = await entry.render();
 ---
 

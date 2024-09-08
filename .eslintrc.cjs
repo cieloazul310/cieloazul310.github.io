@@ -1,3 +1,6 @@
+const path = require("path");
+
+/** @type {import("eslint").Linter.Config} */
 module.exports = {
   env: {
     es6: true,
@@ -14,6 +17,13 @@ module.exports = {
     project: "./tsconfig.json",
     tsconfigRootDir: __dirname,
   },
+  settings: {
+    "import/resolver": {
+      typescript: {
+        project: path.resolve(__dirname, "./tsconfig.json"),
+      },
+    },
+  },
   overrides: [
     {
       files: ["*.astro"],
@@ -28,9 +38,15 @@ module.exports = {
       },
     },
     {
-      files: ["panda.config.ts", "astro.config.ts"],
+      files: ["panda.config.ts", "postcss.config.cjs", "astro.config.ts"],
       rules: {
         "import/no-extraneous-dependencies": "off",
+      },
+    },
+    {
+      files: ["postcss.config.cjs"],
+      rules: {
+        "global-require": "off",
       },
     },
     {

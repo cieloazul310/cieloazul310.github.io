@@ -2,8 +2,8 @@
 /* eslint-disable-next-line import/no-unresolved */
 import { getDataEntryById, type CollectionEntry } from "astro:content";
 import { ArticleListItem } from "@cieloazul310/astro-sarkara";
+import { dateString } from "@/utils";
 import CategoryTypeBadge from "./CategoryTypeBadge.astro";
-import { dateString } from "../utils";
 
 interface Props {
   post: CollectionEntry<"post">;

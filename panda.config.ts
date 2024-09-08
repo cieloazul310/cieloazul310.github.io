@@ -9,12 +9,10 @@ export default defineSarkaraConfig({
   palette: { primary: "sky", secondary: "rose" },
 
   // Where to look for your css declarations
-  include: ["./src/**/*.{js,ts,astro,mdx}"],
+  include: ["./src/**/*.{js,ts,astro,mdx}", "./node_modules/@cieloazul310/**/*.{js,ts,astro}",],
 
   // customizing theme
   theme: {
-    extend: {
-
-    },
+    extend: {},
   },
 });
