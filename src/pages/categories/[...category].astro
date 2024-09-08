@@ -1,6 +1,6 @@
 ---
 /* eslint-disable-next-line import/no-unresolved */
-import { getCollection, getDataEntryById } from "astro:content";
+import { getCollection, getEntry } from "astro:content";
 import type { InferGetStaticPropsType } from "astro";
 import {
   SarkaraLayout,
@@ -33,10 +33,7 @@ type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 const { category } = Astro.props;
 
 const { name, description, url } = category.data;
-const categoryType = await getDataEntryById(
-  "categoryType",
-  category.data.type.id,
-);
+const categoryType = await getEntry("categoryType", category.data.type.id);
 const allPost = await getCollection(
   "post",
   (post) =>

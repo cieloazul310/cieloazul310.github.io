@@ -31,9 +31,6 @@ const href = isInternal(src) ? useAbsoluteUrl(src) : src;
     src={src}
     loading={loading}
     height={height}
-    {...props}
-  >
-    <p>Your Browser do not support iframe.</p>
-  </iframe>
+    {...props}></iframe>
   <figcaption><Link href={href}>新しいタブで開く</Link></figcaption>
 </figure>
