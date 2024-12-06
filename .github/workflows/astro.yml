@@ -89,10 +89,8 @@ jobs:
 
       - name: Move to content collection
         run: |
-          cp ${{ env.BUILD_PATH }}/src/content/config.ts ${{ env.CLONED_PATH }}/src
-          rm -rf ${{ env.BUILD_PATH }}/src/content
-          mv ${{ env.CLONED_PATH }}/src ${{ env.BUILD_PATH }}/src/content
-          tree ${{ env.BUILD_PATH }}/src/content
+          mv ${{ env.CLONED_PATH }}/src ${{ env.BUILD_PATH }}/content
+          tree ${{ env.BUILD_PATH }}/content
 
       - name: Type checking
         run: |
