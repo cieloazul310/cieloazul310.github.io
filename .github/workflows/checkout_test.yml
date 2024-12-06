@@ -71,6 +71,7 @@ jobs:
 
       - name: Move to content collection
         run: |
+          rm -rf ${{ env.BUILD_PATH }}/content
           mv ${{ env.CLONED_PATH }}/src ${{ env.BUILD_PATH }}/content
           tree ${{ env.BUILD_PATH }}/content
         
