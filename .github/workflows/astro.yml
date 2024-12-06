@@ -89,8 +89,8 @@ jobs:
 
       - name: Move to content collection
         run: |
-          mv ${{ env.CLONED_PATH }}/src ${{ env.BUILD_PATH }}/content
-          tree ${{ env.BUILD_PATH }}/content
+          rm -rf ${{ env.BUILD_PATH }}/src/content
+          mv ${{ env.CLONED_PATH }}/src ${{ env.BUILD_PATH }}/src/content
 
       - name: Type checking
         run: |
