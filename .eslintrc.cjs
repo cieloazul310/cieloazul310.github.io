@@ -50,7 +50,7 @@ module.exports = {
       },
     },
     {
-      files: ["src/content/config.ts"],
+      files: ["src/content.config.ts"],
       rules: {
         "import/prefer-default-export": "off",
       },

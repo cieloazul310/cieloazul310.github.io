@@ -1,6 +1,6 @@
 ---
 /* eslint-disable-next-line import/no-unresolved */
-import { getCollection, getEntry } from "astro:content";
+import { getCollection, getEntry, render } from "astro:content";
 import type { InferGetStaticPropsType } from "astro";
 import {
   SarkaraLayout,
@@ -33,7 +33,7 @@ export async function getStaticPaths() {
 
       return {
         params: {
-          slug: post.slug,
+          slug: post.id,
         },
         props: {
           post,
@@ -50,20 +50,24 @@ const { post, left, right } = Astro.props;
 const navigation = useNavigation(
   { left, right },
   {
-    href: (obj) => `/${obj.slug}`,
+    href: (obj) => `/${obj.id}`,
     primaryText: (obj) => obj.data.title,
     secondaryText: (obj) => dateString(obj.data.date),
   },
 );
-const entry = await getEntry("post", post.slug);
+const entry = await getEntry("post", post.id);
 const category = await getEntry("category", post.data.category.id);
-const categoryType = await getEntry("categoryType", category.data.type.id);
-const { Content } = await entry.render();
+const categoryType = await getEntry(
+  "categoryType",
+  category?.data.type.id ?? "",
+);
+if (!entry) return;
+const { Content } = await render(entry);
 ---
 
 <SarkaraLayout
   title={post.data.title}
-  image={entry.data.featuredImg?.src}
+  image={entry?.data.featuredImg?.src}
   siteMetadata={siteMetadata}
   menu={menu}
 >
@@ -109,14 +113,21 @@ const { Content } = await entry.render();
           {post.data.title}
         </h2>
       </hgroup>
-      <p>
-        <Badge colorPalette={getCategoryColor(categoryType.id)} slot="badge">
-          {categoryType.data.name}
-        </Badge>
-      </p>
+      {
+        categoryType && (
+          <p>
+            <Badge
+              colorPalette={getCategoryColor(categoryType.id)}
+              slot="badge"
+            >
+              {categoryType.data.name}
+            </Badge>
+          </p>
+        )
+      }
     </footer>
   </Paper>
-  <Category category={category} />
+  {category && <Category category={category} />}
   <Navigation {...navigation} />
   <Navigation {...navigation} direction="column" slot="sidebar-top" />
 </SarkaraLayout>

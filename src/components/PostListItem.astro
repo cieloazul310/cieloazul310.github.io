@@ -10,16 +10,23 @@ interface Props {
 }
 const { post } = Astro.props;
 const category = await getEntry("category", post.data.category.id);
-const categoryType = await getEntry("categoryType", category.data.type.id);
+const categoryType = await getEntry(
+  "categoryType",
+  category?.data.type.id ?? "",
+);
 ---
 
 <ArticleListItem
-  href={`/${post.slug}`}
+  href={`/${post.id}`}
   title={post.data.title}
   astroImage={post.data.featuredImg}
   imageAlt={post.data.featuredImgAlt ?? post.data.title}
-  imagePlaceholder={categoryType.data.name}
+  imagePlaceholder={categoryType?.data.name}
 >
-  <CategoryTypeBadge slot="badge" categoryType={categoryType} />
+  {
+    categoryType && (
+      <CategoryTypeBadge slot="badge" categoryType={categoryType} />
+    )
+  }
   <span slot="headerText">{dateString(post.data.date)}</span>
 </ArticleListItem>
