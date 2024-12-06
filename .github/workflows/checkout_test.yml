@@ -71,9 +71,9 @@ jobs:
 
       - name: Move to content collection
         run: |
-          rm -rf ${{ env.BUILD_PATH }}/content
-          mv ${{ env.CLONED_PATH }}/src ${{ env.BUILD_PATH }}/content
-          tree ${{ env.BUILD_PATH }}/content
+          rm -rf ${{ env.BUILD_PATH }}/src/content
+          mv ${{ env.CLONED_PATH }}/src ${{ env.BUILD_PATH }}/src/content
+          tree ${{ env.BUILD_PATH }}/src/content
         
         #run: |
         #  cp ${{ env.BUILD_PATH }}/src/content/config.ts ${{ env.CLONED_PATH }}/src
