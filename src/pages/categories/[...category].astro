@@ -43,7 +43,11 @@ const allPost = await getCollection(
 ---
 
 <SarkaraLayout title={name} menu={menu} siteMetadata={siteMetadata}>
-  <CategoryTypeBadge slot="jumbotron-header" categoryType={categoryType} />
+  {
+    categoryType && (
+      <CategoryTypeBadge slot="jumbotron-header" categoryType={categoryType} />
+    )
+  }
   {
     (description || url) && (
       <Paper>
@@ -63,7 +67,11 @@ const allPost = await getCollection(
         .map((post) => <PostListItem post={post} />)
     }
   </ArticleList>
-  <PaperLink href={`/categories/${categoryType.id}`}
-    >{categoryType.data.name}</PaperLink
-  >
+  {
+    categoryType && (
+      <PaperLink href={`/categories/${categoryType.id}`}>
+        {categoryType.data.name}
+      </PaperLink>
+    )
+  }
 </SarkaraLayout>

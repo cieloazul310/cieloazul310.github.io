@@ -1,7 +1,11 @@
 import { z, defineCollection, reference } from "astro:content";
+import { glob } from "astro/loaders";
 
 const postCollection = defineCollection({
-  type: "content",
+  loader: glob({
+    pattern: ["**/*.md", "**/*.mdx"],
+    base: "./src/content/post",
+  }),
   schema: ({ image }) =>
     z.object({
       title: z.string(),
@@ -23,7 +27,7 @@ const postCollection = defineCollection({
 });
 
 const categoryCollection = defineCollection({
-  type: "data",
+  loader: glob({ pattern: "**/*.yml", base: "./src/content/category" }),
   schema: z.object({
     name: z.string(),
     type: reference("categoryType"),
@@ -33,7 +37,7 @@ const categoryCollection = defineCollection({
 });
 
 const categoryTypeCollection = defineCollection({
-  type: "data",
+  loader: glob({ pattern: "**/*.yml", base: "./src/content/categoryType" }),
   schema: z.object({
     name: z.string(),
     description: z.string().optional().nullable(),
