@@ -12,7 +12,7 @@
     "lint-staged": "lint-staged"
   },
   "dependencies": {
-    "@cieloazul310/astro-sarkara": "^2.1.0",
+    "@cieloazul310/astro-sarkara": "^2.1.1",
     "@iconify-json/mdi": "^1.2.1",
     "astro": "^5.0.2",
     "astro-icon": "^1.1.4",
