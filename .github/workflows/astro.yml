@@ -44,7 +44,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Detect package manager
         id: detect-package-manager
@@ -65,7 +65,7 @@ jobs:
           fi
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: latest
           cache: ${{ steps.detect-package-manager.outputs.manager }}
@@ -80,7 +80,7 @@ jobs:
         working-directory: ${{ env.BUILD_PATH }}
 
       - name: Clone contents repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: cieloazul310/map310-contents
           path: ${{ env.CLONED_PATH }}
@@ -105,7 +105,7 @@ jobs:
         working-directory: ${{ env.BUILD_PATH }}
         
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v4
         with:
           path: ${{ env.BUILD_PATH }}/dist
 
