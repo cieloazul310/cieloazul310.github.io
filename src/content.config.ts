@@ -1,4 +1,6 @@
-import { z, defineCollection, reference } from "astro:content";
+/* eslint-disable-next-line import/no-unresolved */
+import { defineCollection, reference } from "astro:content";
+import { z } from "astro/zod";
 import { glob } from "astro/loaders";
 
 const postCollection = defineCollection({
@@ -18,8 +20,7 @@ const postCollection = defineCollection({
       featuredImg: image()
         .optional()
         .catch((ctx) => {
-          /* eslint-disable-next-line @typescript-eslint/no-unused-expressions */
-          ctx.error;
+          console.warn(ctx.issues);
           return undefined;
         }),
       featuredImgAlt: z.string().optional(),
