@@ -17,13 +17,8 @@ const postCollection = defineCollection({
       tags: z.array(z.string()),
       category: reference("category"),
       author: z.string(),
-      featuredImg: image()
-        .optional()
-        .catch((ctx) => {
-          console.warn(ctx.issues);
-          return undefined;
-        }),
-      featuredImgAlt: z.string().optional(),
+      featuredImg: image().nullish(),
+      featuredImgAlt: z.string().nullish(),
     }),
 });
 
