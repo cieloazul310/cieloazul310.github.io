@@ -17,8 +17,8 @@ const postCollection = defineCollection({
       tags: z.array(z.string()),
       category: reference("category"),
       author: z.string(),
-      featuredImg: image().nullish(),
-      featuredImgAlt: z.string().nullish(),
+      featuredImg: image().optional(),
+      featuredImgAlt: z.string().optional(),
     }),
 });
 
