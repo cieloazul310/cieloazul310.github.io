@@ -2,6 +2,7 @@ import { defineConfig } from 'astro/config';
 import icon from "astro-icon";
 import partytown from "@astrojs/partytown";
 import mdx from "@astrojs/mdx";
+import { unified } from "@astrojs/markdown-remark";
 import rehypeClassNames from "rehype-class-names";
 import mdxClasses from "./src/mdx-classes";
 
@@ -18,6 +19,8 @@ export default defineConfig({
     }),
   ],
   markdown: {
-    rehypePlugins: [[rehypeClassNames, mdxClasses]],
+    processor: unified({
+      rehypePlugins: [[rehypeClassNames, mdxClasses]],
+    }),
   },
 });
