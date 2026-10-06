@@ -1,18 +1,19 @@
+import { defineConfig } from "@pandacss/dev";
 import {
+  createSarkaraPreset,
   defineSarkaraConfig,
 } from "@cieloazul310/astro-sarkara/preset";
 
-// https://panda-css.com/docs/references/config
-export default defineSarkaraConfig({
-  // primary and secondary colors is required
-  // https://panda-css.com/docs/customization/theme#colors
-  palette: { primary: "sky", secondary: "rose" },
-
-  // Where to look for your css declarations
-  include: ["./src/**/*.{js,ts,astro,mdx}", "./node_modules/@cieloazul310/**/*.{js,ts,astro}",],
-
-  // customizing theme
-  theme: {
-    extend: {},
-  },
+export default defineConfig({
+  preflight: true,
+  presets: [
+    "@pandacss/preset-base",
+    "@pandacss/preset-panda",
+    createSarkaraPreset({ primaryColor: "sky", secondaryColor: "rose" }),
+  ],
+  include: [
+    "./src/**/*.{js,ts,astro,mdx}",
+    "./node_modules/@cieloazul310/**/*.{js,ts,astro}",
+  ],
+  outDir: "styled-system",
 });

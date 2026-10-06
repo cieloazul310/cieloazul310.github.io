@@ -1,28 +1,24 @@
 import { cwd } from "process";
 import { resolve } from "path";
-import globals from "globals";
 import { defineConfig } from "eslint/config";
+import globals from "globals";
 import pluginJs from "@eslint/js";
 import tseslint from "typescript-eslint";
-import importPlugin from "eslint-plugin-import";
-import jsxA11yPlugin from "eslint-plugin-jsx-a11y";
+import { importX } from "eslint-plugin-import-x";
 import eslintPluginAstro from "eslint-plugin-astro";
 import astroParser from "astro-eslint-parser";
 import typescriptEslintParser from "@typescript-eslint/parser";
 import eslintConfigPrettier from "eslint-config-prettier";
+import { createTypeScriptImportResolver } from "eslint-import-resolver-typescript";
 
-const project = resolve(cwd(), "./tsconfig.json");
+const project = resolve(cwd(), "tsconfig.json");
 
 export default defineConfig([
   pluginJs.configs.recommended,
-  importPlugin.flatConfigs.recommended,
   ...tseslint.configs.recommended,
-  {
-    plugins: {
-      "jsx-a11y": jsxA11yPlugin,
-    },
-  },
-  ...eslintPluginAstro.configs["jsx-a11y-recommended"],
+  importX.flatConfigs.recommended,
+  importX.flatConfigs.typescript,
+  eslintPluginAstro.configs["flat/recommended"],
   {
     languageOptions: {
       ecmaVersion: 2024,
@@ -32,15 +28,11 @@ export default defineConfig([
   },
   {
     settings: {
-      "import/resolver": {
-        typescript: {
-          project,
-        },
-      },
+      "import-x/resolver-next": [createTypeScriptImportResolver({ project })],
     },
   },
   {
-    files: ["**/*.astro"],
+    files: ["*.astro"],
     languageOptions: {
       parser: astroParser,
       parserOptions: {
